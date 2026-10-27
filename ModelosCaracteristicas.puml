@@ -1,0 +1,82 @@
+@startuml
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+hide empty members
+hide circle
+
+' Ajustes para organizar el abanico horizontal
+skinparam ranksep 50
+skinparam nodesep 20
+
+class "BookApp" as Root
+
+' ==========================================
+' CORE (Tal cual el diagrama de partida)
+' ==========================================
+class "Biblioteca (Core)" as Core <<Obligatoria>>
+class "Título" as Titulo <<Obligatoria>>
+class "Estado de lectura" as Estado <<Obligatoria>>
+
+' ==========================================
+' COMUNES (F1 - F5)
+' ==========================================
+class "Progreso (F1)" as F1 <<Opcional>>
+class "Notas y citas (F2)" as F2 <<Opcional>>
+class "Categorías (F3)" as F3 <<Opcional>>
+class "Valoraciones (F4)" as F4 <<Opcional>>
+class "Estadísticas (F5)" as F5 <<Opcional>>
+
+' ==========================================
+' ORIGINALES (O1 - O5 del grupo ReadIT)
+' ==========================================
+class "Prioridad Lectura (O1)" as O1 <<Opcional>>
+class "Fecha Objetivo (O2)" as O2 <<Opcional>>
+class "Recordatorios (O3)" as O3 <<Opcional>>
+class "Temporizador Vivo (O4)" as O4 <<Opcional>>
+class "Persistencia (O5)" as O5 <<Opcional>>
+
+' Variabilidad técnica de la Persistencia
+class "JSON" as JSON <<XOR>>
+class "Core Data" as CoreData <<XOR>>
+
+
+' ==========================================
+' CONSTRUCCIÓN DEL ÁRBOL
+' ==========================================
+Root *-- Core
+Core *-- Titulo
+Core *-- Estado
+
+Root o-- F1
+Root o-- F2
+Root o-- F3
+Root o-- F4
+Root o-- F5
+
+Root o-- O1
+Root o-- O2
+Root o-- O3
+Root o-- O4
+Root o-- O5
+
+O5 *-- JSON
+O5 *-- CoreData
+note on link: **XOR**
+
+' ==========================================
+' RESTRICCIONES CRUZADAS (Cross-Tree)
+' ==========================================
+F5 ..> F1 : <<requires>>
+O3 ..> O2 : <<requires>>
+JSON ..> F2 : <<excludes>>
+note right of JSON
+  Exclusión justificada:
+  JSON descarta "Notas"
+  si pesan demasiado.
+end note
+
+@enduml
