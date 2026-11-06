@@ -12,7 +12,7 @@ hide circle
 skinparam ranksep 50
 skinparam nodesep 20
 
-class "BookApp" as Root
+class "ReadIt" as Root
 
 ' ==========================================
 ' CORE (Tal cual el diagrama de partida)

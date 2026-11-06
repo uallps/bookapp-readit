@@ -1,0 +1,70 @@
+name: CI
+
+# Compila ReadIt en los tres sistemas. En Linux y Windows también prueba la
+# interfaz y guarda capturas.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  macos:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar las variantes del proyecto de Xcode
+        run: |
+          for scheme in "ReadIt" "ReadIt Prioridades"; do
+            xcodebuild -project ReadIt.xcodeproj -scheme "$scheme" -destination 'platform=macOS' build CODE_SIGNING_ALLOWED=NO
+          done
+
+  linux:
+    runs-on: ubuntu-latest
+    container: swift:6.3-noble
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencias (GTK 4, pantalla virtual y clics)
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq libgtk-4-dev libfontconfig-dev xvfb xdotool imagemagick fonts-dejavu
+      - name: Compilar
+        run: swift build --product ReadIt
+      - name: Probar la interfaz (variante base)
+        run: bash .github/scripts/linux-ui.sh
+      - name: Probar la interfaz (variante Prioridades)
+        run: bash .github/scripts/linux-ui.sh Prioridades
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-ui
+          path: shots
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-vsdevenv@v5
+      - uses: compnerd/gha-setup-swift@v0.3.0
+        with:
+          branch: swift-6.3.3-release
+          tag: 6.3.3-RELEASE
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: windows-build-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          restore-keys: windows-build-
+      - name: Compilar
+        run: swift build --product ReadIt
+      - name: Arrancar y probar la interfaz
+        run: ./.github/scripts/windows-ui.ps1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-ui
+          path: |
+            shots
+            *-out.txt
+            *-err.txt

@@ -1,2 +1,2 @@
 # bookapp-readit
-BookApp - ReadIT (LPS 2026/27)
+ReadIt (LPS 2026/27)
