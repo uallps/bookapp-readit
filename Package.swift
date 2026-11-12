@@ -17,6 +17,7 @@ let package = Package(
     // En Xcode, el mismo papel lo cumple el target «ReadIt Prioridades».
     traits: [
         .trait(name: "Prioridades", description: "Característica opcional: prioridad del libro"),
+        .trait(name: "Progreso", description: "Característica opcional F1: Progreso de lectura"),
     ],
     dependencies: [
         .package(url: "https://github.com/uallps/SwiftOpenUI.git", branch: "uallps"),
