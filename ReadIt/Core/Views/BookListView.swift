@@ -22,15 +22,16 @@ struct BookListView: View {
     }
 
     /// Una fila: enlace al detalle del libro, con menú contextual para borrarlo.
+    /// Una fila: enlace al detalle del libro, con menú contextual para borrarlo.
     private func bookRow(book: Book) -> some View {
         NavigationLink(destination: BookDetailView(book: binding(for: book))) {
             BookRowView(
                 book: book,
                 showDueDates: config.showDueDates,
-                showPriorities: config.showPriorities,
-                toggleCompletion: { viewModel.toggleCompletion(id: book.id) }
+                showPriorities: config.showPriorities
             )
             .contextMenu {
+                // Le quitamos el role: .destructive para que SwiftOpenUI no se queje
                 Button("Eliminar libro") {
                     viewModel.removeBook(id: book.id)
                 }

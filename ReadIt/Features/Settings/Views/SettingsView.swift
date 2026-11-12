@@ -8,7 +8,7 @@ struct SettingsView: View {
         @Bindable var config = config
         Form {
             Section(header: Text("Características")) {
-                Toggle("Mostrar fechas de vencimiento", isOn: $config.showDueDates)
+                Toggle("Mostrar fecha objetivo", isOn: $config.showDueDates)
 #if Prioridades
                 Toggle("Mostrar prioridades", isOn: $config.showPriorities)
 #endif

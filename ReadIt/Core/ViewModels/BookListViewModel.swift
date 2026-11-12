@@ -5,9 +5,9 @@ import Observation
 final class BookListViewModel {
     /// Cada cambio en la lista (marcar, añadir, borrar o editar en el detalle) se guarda.
     var books: [Book] = [
-        Book(title: "El nombre del viento", dueDate: Date(timeIntervalSince1970: 1_794_700_800), priority: .high),
-        Book(title: "Dune", priority: .medium),
-        Book(title: "1984")
+        Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
+        Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
+        Book(title: "1984", author: "George Orwell", state: .finished)
     ] {
         didSet { save() }
     }
@@ -33,9 +33,9 @@ final class BookListViewModel {
         }
     }
 
-    func toggleCompletion(id: UUID) {
+    func updateState(id: UUID, to newState: ReadingState) {
         guard let index = books.firstIndex(where: { $0.id == id }) else { return }
-        books[index].isCompleted.toggle()
+        books[index].state = newState
     }
 
     func addBook() {
