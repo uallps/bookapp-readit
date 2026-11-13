@@ -17,6 +17,7 @@ struct BookListView: View {
                                 selectedBookID = nil
                             }
                         }
+                        .frame(height: 48)
                     }
             } else {
                 List {
@@ -72,7 +73,7 @@ struct BookListView: View {
             Text(title)
                 .font(.subheadline)
                 .padding(.horizontal, 12)
-                .padding(.vertical, 7)
+                .padding(.vertical, 5)
                 .background(selectedCategory == filter ? Color.bookAccent : Color.secondary.opacity(0.15))
                 .foregroundColor(selectedCategory == filter ? .white : .primary)
                 .clipShape(Capsule())
