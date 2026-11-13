@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:bookapp-readit}",
+            "name": "Debug ReadIt",
+            "target": "ReadIt",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug ReadIt"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:bookapp-readit}",
+            "name": "Release ReadIt",
+            "target": "ReadIt",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release ReadIt"
+        }
+    ]
+}
