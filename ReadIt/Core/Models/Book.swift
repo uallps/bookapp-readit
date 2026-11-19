@@ -20,10 +20,12 @@ struct Book: Identifiable, Codable {
     var priority: Priority?
 #endif
 
-    private enum CodingKeys: String, CodingKey {
-        case id, title, author, state, categories, category, dueDate, priority
-    }
+#if Notas
+    // Feature opcional: Notas y citas
+    var notes: [Note] = []
+#endif
 
+    // Initializer base explícito
     init(
         id: UUID = UUID(),
         title: String,
@@ -40,42 +42,37 @@ struct Book: Identifiable, Codable {
         self.dueDate = dueDate
     }
 
+    private enum CodingKeys: String, CodingKey {
+        case id, title, author, state, categories, category, dueDate
 #if Prioridades
-    init(
-        id: UUID = UUID(),
-        title: String,
-        author: String? = nil,
-        state: ReadingState = .pending,
-        categories: [String] = [],
-        dueDate: Date? = nil,
-        priority: Priority
-    ) {
-        self.init(
-            id: id,
-            title: title,
-            author: author,
-            state: state,
-            categories: categories,
-            dueDate: dueDate
-        )
-        self.priority = priority
-    }
+        case priority
 #endif
+#if Notas
+        case notes
+#endif
+    }
 
+    // Decodificación defensiva sin romper los inicializadores ni la compatibilidad
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         title = try container.decode(String.self, forKey: .title)
         author = try container.decodeIfPresent(String.self, forKey: .author)
         state = try container.decodeIfPresent(ReadingState.self, forKey: .state) ?? .pending
+        
         var decodedCategories = try container.decodeIfPresent([String].self, forKey: .categories) ?? []
         if let legacyCategory = try container.decodeIfPresent(String.self, forKey: .category) {
             decodedCategories.append(legacyCategory)
         }
         categories = Self.normalizedCategories(decodedCategories)
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
+
 #if Prioridades
         priority = try container.decodeIfPresent(Priority.self, forKey: .priority)
+#endif
+
+#if Notas
+        notes = try container.decodeIfPresent([Note].self, forKey: .notes) ?? []
 #endif
     }
 
@@ -89,6 +86,9 @@ struct Book: Identifiable, Codable {
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
 #if Prioridades
         try container.encodeIfPresent(priority, forKey: .priority)
+#endif
+#if Notas
+        try container.encode(notes, forKey: .notes)
 #endif
     }
 
@@ -116,3 +116,28 @@ struct Book: Identifiable, Codable {
         return result
     }
 }
+
+// Extensión con conveniencias cuando Prioridades está activo
+#if Prioridades
+extension Book {
+    init(
+        id: UUID = UUID(),
+        title: String,
+        author: String? = nil,
+        state: ReadingState = .pending,
+        categories: [String] = [],
+        dueDate: Date? = nil,
+        priority: Priority? = nil
+    ) {
+        self.init(
+            id: id,
+            title: title,
+            author: author,
+            state: state,
+            categories: categories,
+            dueDate: dueDate
+        )
+        self.priority = priority
+    }
+}
+#endif

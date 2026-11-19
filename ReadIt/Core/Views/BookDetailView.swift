@@ -117,6 +117,14 @@ struct BookDetailView: View {
                 }
             }
 #endif
+
+#if Notas
+            if config.enableNotes {
+                Section {
+                    NotesListView(notes: $book.notes)
+                }
+            }
+#endif
         }
         .navigationTitle(book.title.isEmpty ? "Nuevo libro" : book.title)
     }
