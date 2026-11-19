@@ -15,6 +15,11 @@ struct SettingsView: View {
                 // Solo compila si el trait Progreso está activo
                 Toggle("Activar progreso de lectura", isOn: $config.enableProgress)
 #endif
+
+#if Temporizador
+                Toggle("Activar temporizador de lectura", isOn: $config.enableTimer)
+#endif
+
             }
         }
         .navigationTitle("Ajustes")
