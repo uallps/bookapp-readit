@@ -16,7 +16,9 @@ struct Book: Identifiable, Codable {
     var categories: [String] = []
 
     var dueDate: Date?
+#if Prioridades
     var priority: Priority?
+#endif
 
     private enum CodingKeys: String, CodingKey {
         case id, title, author, state, categories, category, dueDate, priority
@@ -28,8 +30,7 @@ struct Book: Identifiable, Codable {
         author: String? = nil,
         state: ReadingState = .pending,
         categories: [String] = [],
-        dueDate: Date? = nil,
-        priority: Priority? = nil
+        dueDate: Date? = nil
     ) {
         self.id = id
         self.title = title
@@ -37,8 +38,29 @@ struct Book: Identifiable, Codable {
         self.state = state
         self.categories = Self.normalizedCategories(categories)
         self.dueDate = dueDate
+    }
+
+#if Prioridades
+    init(
+        id: UUID = UUID(),
+        title: String,
+        author: String? = nil,
+        state: ReadingState = .pending,
+        categories: [String] = [],
+        dueDate: Date? = nil,
+        priority: Priority
+    ) {
+        self.init(
+            id: id,
+            title: title,
+            author: author,
+            state: state,
+            categories: categories,
+            dueDate: dueDate
+        )
         self.priority = priority
     }
+#endif
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -52,7 +74,9 @@ struct Book: Identifiable, Codable {
         }
         categories = Self.normalizedCategories(decodedCategories)
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
+#if Prioridades
         priority = try container.decodeIfPresent(Priority.self, forKey: .priority)
+#endif
     }
 
     func encode(to encoder: Encoder) throws {
@@ -63,7 +87,9 @@ struct Book: Identifiable, Codable {
         try container.encode(state, forKey: .state)
         try container.encode(categories, forKey: .categories)
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
+#if Prioridades
         try container.encodeIfPresent(priority, forKey: .priority)
+#endif
     }
 
     mutating func addCategory(_ category: String) {

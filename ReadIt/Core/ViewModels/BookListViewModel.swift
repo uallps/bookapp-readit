@@ -4,12 +4,24 @@ import Observation
 @Observable
 final class BookListViewModel {
     /// Cada cambio en la lista (marcar, añadir, borrar o editar en el detalle) se guarda.
-    var books: [Book] = [
-        Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
-        Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
-        Book(title: "1984", author: "George Orwell", state: .finished)
-    ] {
+    var books: [Book] = BookListViewModel.sampleBooks {
         didSet { save() }
+    }
+
+    private static var sampleBooks: [Book] {
+#if Prioridades
+        [
+            Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
+            Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
+            Book(title: "1984", author: "George Orwell", state: .finished)
+        ]
+#else
+        [
+            Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading),
+            Book(title: "Dune", author: "Frank Herbert", state: .pending),
+            Book(title: "1984", author: "George Orwell", state: .finished)
+        ]
+#endif
     }
 
     @ObservationIgnored private let storageProvider: StorageProvider
@@ -22,7 +34,6 @@ final class BookListViewModel {
     }
 
     /// Carga los libros guardados, solo la primera vez que se llama.
-    /// Si aún no hay fichero, se quedan los libros de ejemplo.
     func loadBooks() async {
         guard !loaded else { return }
         loaded = true
@@ -39,7 +50,7 @@ final class BookListViewModel {
     }
 
     func addBook() {
-        books.append(Book(title: "Libro de ejemplo"))
+        books.append(Book(title: "Libro de ejemplo", state: .pending))
     }
 
     func removeBook(id: UUID) {
@@ -57,12 +68,12 @@ final class BookListViewModel {
         books[index] = book
     }
 
-    /// Guarda la lista completa. `_Concurrency.Task` es la tarea asíncrona de Swift.
+    /// Guarda la lista completa en disco.
     private func save() {
-        let books = books
+        let currentBooks = books
         _Concurrency.Task {
             do {
-                try await storageProvider.saveBooks(books: books)
+                try await storageProvider.saveBooks(books: currentBooks)
             } catch {
                 print("No se han guardado los libros: \(error)")
             }

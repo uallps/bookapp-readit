@@ -1,19 +1,42 @@
 import SwiftUI
 
-/// Fila de un libro. No conoce el ViewModel: recibe los flags y los datos.
+/// Fila de un libro con insignias en formato pastilla (pill).
 struct BookRowView: View {
     let book: Book
     let showDueDates: Bool
     let showPriorities: Bool
 
+    @Environment(AppConfig.self) private var config
+
+#if Progreso
+    @Environment(ProgressViewModel.self) private var progressVM
+#endif
+
     var body: some View {
-        HStack {
-            // Columna izquierda: Información del libro
+        HStack(alignment: .center, spacing: 10) {
+            // Columna izquierda: Título, prioridad, autor, fecha y progreso
             VStack(alignment: .leading, spacing: 4) {
-                Text(book.title)
-                    .font(.headline)
-                
-                // Mostrar el autor si existe (obligatorio del Core)
+                HStack(spacing: 8) {
+                    Text(book.title)
+                        .font(.headline)
+
+#if Prioridades
+                    // Píldora de prioridad (Alta / Media / Baja)
+                    if showPriorities, let priority = book.priority {
+                        Text(priorityText(for: priority))
+                            .font(.caption2)
+                            .bold()
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(
+                                Capsule()
+                                    .fill(priorityBackgroundColor(for: priority))
+                            )
+                            .foregroundColor(priorityTextColor(for: priority))
+                    }
+#endif
+                }
+
                 if let author = book.author {
                     Text(author)
                         .font(.subheadline)
@@ -30,32 +53,37 @@ struct BookRowView: View {
                     Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .shortened))")
                         .bookCaption()
                 }
-                
-#if Prioridades
-                // Feature opcional: Prioridades (variabilidad en compilación)
-                if showPriorities, let priority = book.priority {
-                    Text("Prioridad: \(priority.rawValue)")
-                        .bookCaption(color: priority.color) 
+
+#if Progreso
+                if config.enableProgress {
+                    if let progress = progressVM.getProgress(bookId: book.id), progress.totalPages > 0 {
+                        let percent = Int(progress.percentage * 100)
+                        Text("Leído: \(percent)% (\(progress.currentPage)/\(progress.totalPages))")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                            .bold()
+                    }
                 }
 #endif
             }
-            
+
             Spacer()
-            
-            // Columna derecha: Píldora de estado de lectura (Prototipo ReadIT)
+
+            // Columna derecha: Píldora de estado de lectura (Leyendo / Pendiente / Terminado)
             Text(book.state.rawValue)
                 .font(.caption)
                 .bold()
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
-                .background(colorForState(book.state))
+                .background(
+                    Capsule()
+                        .fill(colorForState(book.state))
+                )
                 .foregroundColor(.white)
-                .clipShape(Capsule())
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 4)
     }
-    
-    /// Asigna colores representativos a cada estado, como en vuestro PDF.
+
     private func colorForState(_ state: ReadingState) -> Color {
         switch state {
         case .pending: return .gray
@@ -63,4 +91,36 @@ struct BookRowView: View {
         case .finished: return .green
         }
     }
+
+#if Prioridades
+    private func priorityText(for priority: Priority) -> String {
+        switch priority {
+        case .high: return "Alta"
+        case .medium: return "Media"
+        case .low: return "Baja"
+        }
+    }
+
+    private func priorityBackgroundColor(for priority: Priority) -> Color {
+        switch priority {
+        case .high:
+            return Color.red.opacity(0.18)
+        case .medium:
+            return Color.orange.opacity(0.18)
+        case .low:
+            return Color.gray.opacity(0.18)
+        }
+    }
+
+    private func priorityTextColor(for priority: Priority) -> Color {
+        switch priority {
+        case .high:
+            return .red
+        case .medium:
+            return .orange
+        case .low:
+            return .secondary
+        }
+    }
+#endif
 }

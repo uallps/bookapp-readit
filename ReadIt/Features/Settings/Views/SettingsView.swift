@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Pantalla de Ajustes: activa o desactiva las características en ejecución.
 struct SettingsView: View {
     @Environment(AppConfig.self) private var config
 
@@ -11,6 +10,10 @@ struct SettingsView: View {
                 Toggle("Mostrar fecha objetivo", isOn: $config.showDueDates)
 #if Prioridades
                 Toggle("Mostrar prioridades", isOn: $config.showPriorities)
+#endif
+#if Progreso
+                // Solo compila si el trait Progreso está activo
+                Toggle("Activar progreso de lectura", isOn: $config.enableProgress)
 #endif
             }
         }

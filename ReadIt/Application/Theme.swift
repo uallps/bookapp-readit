@@ -1,8 +1,6 @@
 import SwiftUI
 
 // El tema de la app: colores y estilos en un solo sitio, añadidos con extensiones.
-// Para cambiar el aspecto se toca este fichero, no las vistas.
-
 extension Color {
     /// Color principal de ReadIt.
     static let bookAccent = Color(red: 0.19, green: 0.38, blue: 0.58)
@@ -20,8 +18,7 @@ struct CaptionStyle: ViewModifier {
 }
 
 extension View {
-    /// Aplica el estilo de texto secundario: `Text("…").bookCaption()`,
-    /// o con otro color: `.bookCaption(color: .red)`.
+    /// Aplica el estilo de texto secundario: `Text("…").bookCaption()`
     func bookCaption(color: Color = .secondary) -> some View {
         modifier(CaptionStyle(color: color))
     }

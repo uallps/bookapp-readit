@@ -81,6 +81,7 @@ struct BookListView: View {
         .buttonStyle(.plain)
     }
 
+    /// Una fila: enlace al detalle del libro, con menú contextual para borrarlo.
     private func bookRow(book: Book) -> some View {
         Button(action: { selectedBookID = book.id }) {
             BookRowView(
@@ -89,7 +90,6 @@ struct BookListView: View {
                 showPriorities: config.showPriorities
             )
             .contextMenu {
-                // Le quitamos el role: .destructive para que SwiftOpenUI no se queje
                 Button("Eliminar libro") {
                     viewModel.removeBook(id: book.id)
                 }
