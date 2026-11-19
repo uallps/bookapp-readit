@@ -26,13 +26,13 @@ struct BookRowView: View {
                 
                 if showDueDates, let dueDate = book.dueDate {
                     Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .shortened))")
-                        .font(.caption)
+                        .bookCaption() // <- Aplicamos el estilo del Theme
                 }
                 
 #if Prioridades
                 if showPriorities, let priority = book.priority {
                     Text("Prioridad: \(priority.rawValue)")
-                        .font(.caption)
+                        .bookCaption(color: priority.color) // <- Aplicamos el estilo y color del Theme
                 }
 #endif
                 

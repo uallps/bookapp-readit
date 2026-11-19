@@ -36,8 +36,7 @@ struct BookListView: View {
         }
     }
 
-    /// Un enlace (Binding) para que el detalle edite el libro. No toca los datos:
-    /// leer y escribir se traducen a métodos del ViewModel.
+    /// Un enlace (Binding) para que el detalle edite el libro sin tocar el array directamente.
     private func binding(for book: Book) -> Binding<Book> {
         Binding(
             get: { viewModel.book(id: book.id) ?? book },
