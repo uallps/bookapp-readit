@@ -1,43 +1,56 @@
 import SwiftUI
 
-/// Fila de un libro. No conoce el ViewModel: recibe los flags y los datos.
+/// Fila de un libro. No conoce el ViewModel principal.
 struct BookRowView: View {
     let book: Book
     let showDueDates: Bool
     let showPriorities: Bool
+    
+    @Environment(AppConfig.self) private var config
+    
+#if Progreso
+    @Environment(ProgressViewModel.self) private var progressVM
+#endif
 
     var body: some View {
         HStack {
-            // Columna izquierda: Información del libro
             VStack(alignment: .leading, spacing: 4) {
                 Text(book.title)
                     .font(.headline)
                 
-                // Mostrar el autor si existe (obligatorio del Core)
                 if let author = book.author {
                     Text(author)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 
-                // Feature opcional: Fechas (si la mantenéis de TaskApp)
                 if showDueDates, let dueDate = book.dueDate {
                     Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .shortened))")
-                        .bookCaption()
+                        .bookCaption() // <- Aplicamos el estilo del Theme
                 }
                 
 #if Prioridades
-                // Feature opcional: Prioridades (variabilidad en compilación)
                 if showPriorities, let priority = book.priority {
                     Text("Prioridad: \(priority.rawValue)")
-                        .bookCaption(color: priority.color) 
+                        .bookCaption(color: priority.color) // <- Aplicamos el estilo y color del Theme
+                }
+#endif
+                
+#if Progreso
+                if config.enableProgress {
+                    if let progress = progressVM.getProgress(bookId: book.id), progress.totalPages > 0 {
+                        let percent = Int(progress.percentage * 100)
+                        Text("Leído: \(percent)% (\(progress.currentPage)/\(progress.totalPages))")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                            .bold()
+                    }
                 }
 #endif
             }
             
             Spacer()
             
-            // Columna derecha: Píldora de estado de lectura (Prototipo ReadIT)
             Text(book.state.rawValue)
                 .font(.caption)
                 .bold()
@@ -50,7 +63,6 @@ struct BookRowView: View {
         .padding(.vertical, 2)
     }
     
-    /// Asigna colores representativos a cada estado, como en vuestro PDF.
     private func colorForState(_ state: ReadingState) -> Color {
         switch state {
         case .pending: return .gray

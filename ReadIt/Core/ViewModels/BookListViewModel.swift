@@ -22,7 +22,6 @@ final class BookListViewModel {
     }
 
     /// Carga los libros guardados, solo la primera vez que se llama.
-    /// Si aún no hay fichero, se quedan los libros de ejemplo.
     func loadBooks() async {
         guard !loaded else { return }
         loaded = true
@@ -39,7 +38,8 @@ final class BookListViewModel {
     }
 
     func addBook() {
-        books.append(Book(title: "Libro de ejemplo"))
+        // Asegúrate de inicializar con las propiedades obligatorias de tu modelo Book
+        books.append(Book(title: "Libro de ejemplo", state: .pending))
     }
 
     func removeBook(id: UUID) {
@@ -57,12 +57,12 @@ final class BookListViewModel {
         books[index] = book
     }
 
-    /// Guarda la lista completa. `_Concurrency.Task` es la tarea asíncrona de Swift.
+    /// Guarda la lista completa en disco.
     private func save() {
-        let books = books
+        let currentBooks = books
         _Concurrency.Task {
             do {
-                try await storageProvider.saveBooks(books: books)
+                try await storageProvider.saveBooks(books: currentBooks)
             } catch {
                 print("No se han guardado los libros: \(error)")
             }
