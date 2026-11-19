@@ -33,6 +33,14 @@ struct BookDetailView: View {
                 .pickerStyle(.segmented)
             }
 
+#if ListaDeseos
+            if config.enableWishlist {
+                Section(header: Text("Lista de Deseos")) {
+                    Toggle("En lista de deseos / Por comprar", isOn: $book.isWishlist)
+                }
+            }
+#endif
+
             Section(header: Text("Categorías asignadas")) {
                 if book.categories.isEmpty {
                     Text("Sin categorías")

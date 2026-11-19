@@ -32,6 +32,13 @@ struct BookListView: View {
                         ScrollView(.horizontal) {
                             HStack(spacing: 8) {
                                 categoryButton("Todas", filter: .all)
+
+#if ListaDeseos
+                                if config.enableWishlist {
+                                    categoryButton("Wishlist", filter: .wishlist)
+                                }
+#endif
+
                                 ForEach(categories, id: \.self) { category in
                                     categoryButton(category, filter: .category(category))
                                 }
@@ -68,10 +75,20 @@ struct BookListView: View {
     }
 
     private var filteredBooks: [Book] {
-        guard case let .category(category) = selectedCategory,
-              categories.contains(category) else { return viewModel.books }
-        return viewModel.books.filter { book in
-            book.categories.contains { $0.caseInsensitiveCompare(category) == .orderedSame }
+        switch selectedCategory {
+        case .all:
+            return viewModel.books
+
+#if ListaDeseos
+        case .wishlist:
+            return viewModel.books.filter { $0.isWishlist }
+#endif
+
+        case .category(let category):
+            guard categories.contains(category) else { return viewModel.books }
+            return viewModel.books.filter { book in
+                book.categories.contains { $0.caseInsensitiveCompare(category) == .orderedSame }
+            }
         }
     }
 
@@ -134,6 +151,9 @@ struct BookListView: View {
 
     private enum CategoryFilter: Hashable {
         case all
+#if ListaDeseos
+        case wishlist
+#endif
         case category(String)
     }
 }
