@@ -35,7 +35,7 @@ click() { xdotool mousemove "$1" "$2" click 1; sleep 1; }
 alive() { kill -0 $APP 2>/dev/null || { echo "La app se ha cerrado"; cat "$OUT/app.log"; exit 1; }; }
 
 # Barra lateral (Libros / Ajustes) a la izquierda; la lista, a la derecha.
-if [ "$VARIANT" = base ]; then FILA3=173; TITULO2=124; else FILA3=188; TITULO2=131; fi
+if [ "$VARIANT" = base ]; then FILA3=193; TITULO2=144; else FILA3=208; TITULO2=151; fi
 
 start; alive; shot 1-inicio
 click 285 $FILA3;   shot 2-tercer-libro-marcado

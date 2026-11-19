@@ -43,6 +43,12 @@ struct BookRowView: View {
                         .foregroundColor(.secondary)
                 }
 
+                if !book.categories.isEmpty {
+                    Text("Categorías: \(book.categories.joined(separator: ", "))")
+                        .bookCaption()
+                }
+                
+                // Feature opcional: Fechas (si la mantenéis de TaskApp)
                 if showDueDates, let dueDate = book.dueDate {
                     Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .shortened))")
                         .bookCaption()

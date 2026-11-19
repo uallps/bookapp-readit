@@ -55,6 +55,7 @@ try {
     # Marcar un libro no debe abrir el detalle.
     Click-Toggle "1984"; Snap $w "2-tercer-libro-marcado"
     if ((Count-Text "1984") -ne 1) { throw "Al marcar el libro se ha salido de la lista" }
+    if ((Count-Text "Pendiente") -ne 2) { throw "El botón de marcar no ha cambiado el estado de 1984" }
 
     # Editar el título en el detalle debe actualizar la lista.
     if (-not (Click-Text $w "Dune")) { throw "No está el libro Dune" }
@@ -62,9 +63,15 @@ try {
     if (-not (Click-Class $w "Edit")) { throw "El detalle no tiene campo de título" }
     Send-Text "{END} hoy"; Snap $w "4-detalle-editado"
     if (-not (Click-Class $w "Edit")) { throw "Al escribir se ha salido del detalle" }
-    if (-not (Click-Text $w "← Back")) { if (-not (Click-Text $w "Back")) { throw "No hay botón para volver" } }
+    if (-not (Click-Text $w "<- Back")) { throw "No hay botón para volver" }
     Snap $w "5-libros-tras-volver"
     if ((Count-Text "Dune hoy") -ne 1) { throw "La lista no muestra el título editado" }
+
+    # El filtro no debe abrir una ventana emergente ni dejar de responder al repetir clics.
+    if (-not (Click-Text $w "Todas")) { throw "No está el filtro de categorías" }
+    if (-not (Click-Text $w "Todas")) { throw "El filtro de categorías ha dejado de responder" }
+    if (-not (Click-Text $w "Todas")) { throw "El filtro de categorías ha dejado de responder al tercer clic" }
+    if ((Count-Text "Dune hoy") -ne 1) { throw "El filtro ha ocultado libros sin categoría" }
 
     # Ajustes: desactivar fechas y comprobarlo en la lista.
     if ((Count-Like "Vence:*") -ne 1) { throw "Al empezar debería verse una fecha de vencimiento" }

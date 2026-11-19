@@ -19,7 +19,7 @@
 | Obligatorio: Core | Libro con identificador, título no vacío, autor (opcional) y estado de lectura; gestión de la biblioteca (alta, consulta, edición, cambio de estado y eliminación) y persistencia local. |
 | F1: Progreso | Total de páginas, página actual y porcentaje leído. |
 | F2: Notas y citas | Anotaciones personales vinculadas a un libro. |
-| F3: Categorías | Clasificación de libros y filtrado de la biblioteca. |
+| F3: Categorías | Asignación de varias categorías, reutilización de las existentes y filtrado horizontal de la biblioteca. |
 | F4: Valoraciones y reseñas | Puntuación de 1 a 5 estrellas y reseña personal. |
 | F5: Estadísticas | Número total de libros y recuento por estado de lectura. |
 | Originales | Diez originales y dos características diferentes por cada integrante del equipo. |
