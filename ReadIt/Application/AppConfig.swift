@@ -24,6 +24,13 @@ final class AppConfig {
     }
 #endif
 
+#if ListaDeseos
+    // Feature opcional: Lista de Deseos (activada por defecto bajo #if ListaDeseos)
+    var enableWishlist: Bool {
+        didSet { store(enableWishlist, forKey: "enableWishlist") }
+    }
+#endif
+
     // F3: Categorías
     var enableCategories: Bool {
         didSet { store(enableCategories, forKey: "enableCategories") }
@@ -59,11 +66,16 @@ final class AppConfig {
         enableNotes = defaults.object(forKey: "enableNotes") as? Bool ?? true
 #endif
 
+#if ListaDeseos
+        // Se inicializa a true por defecto cuando el módulo ListaDeseos está compilado
+        enableWishlist = defaults.object(forKey: "enableWishlist") as? Bool ?? true
+#endif
+
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
         enableRatings = defaults.object(forKey: "enableRatings") as? Bool ?? false
         enableStats = defaults.object(forKey: "enableStats") as? Bool ?? false
 
-        //04: Temporizador en vivo
+        // O4: Temporizador en vivo
         enableTimer = defaults.object(forKey: "enableTimer") as? Bool ?? false
     }
 

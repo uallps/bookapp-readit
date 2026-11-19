@@ -25,6 +25,11 @@ struct Book: Identifiable, Codable {
     var notes: [Note] = []
 #endif
 
+#if ListaDeseos
+    // Feature opcional: Lista de Deseos / Por comprar
+    var isWishlist: Bool = false
+#endif
+
     // Initializer base explícito
     init(
         id: UUID = UUID(),
@@ -50,6 +55,9 @@ struct Book: Identifiable, Codable {
 #if Notas
         case notes
 #endif
+#if ListaDeseos
+        case isWishlist
+#endif
     }
 
     // Decodificación defensiva sin romper los inicializadores ni la compatibilidad
@@ -74,6 +82,10 @@ struct Book: Identifiable, Codable {
 #if Notas
         notes = try container.decodeIfPresent([Note].self, forKey: .notes) ?? []
 #endif
+
+#if ListaDeseos
+        isWishlist = try container.decodeIfPresent(Bool.self, forKey: .isWishlist) ?? false
+#endif
     }
 
     func encode(to encoder: Encoder) throws {
@@ -89,6 +101,9 @@ struct Book: Identifiable, Codable {
 #endif
 #if Notas
         try container.encode(notes, forKey: .notes)
+#endif
+#if ListaDeseos
+        try container.encode(isWishlist, forKey: .isWishlist)
 #endif
     }
 
