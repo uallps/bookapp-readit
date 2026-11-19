@@ -17,6 +17,8 @@ struct Book: Identifiable, Codable {
     // Feature opcional: Fecha objetivo de finalización
     var dueDate: Date? 
     
+#if Prioridades
     // Feature opcional: Prioridades
     var priority: Priority? 
+#endif
 }
