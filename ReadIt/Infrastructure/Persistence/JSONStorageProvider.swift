@@ -1,3 +1,4 @@
+#if PersistenciaJSON
 import Foundation
 
 /// Guarda los libros en un fichero JSON en la carpeta Documentos del usuario.
@@ -16,9 +17,9 @@ final class JSONStorageProvider: StorageProvider {
 
     func saveBooks(books: [Book]) async throws {
         let data = try JSONEncoder().encode(books)
-        // La carpeta Documentos no existe en todos los sistemas (por ejemplo, un Linux mínimo).
         try FileManager.default.createDirectory(
             at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try data.write(to: fileURL)
     }
 }
+#endif

@@ -27,8 +27,8 @@ final class BookListViewModel {
     @ObservationIgnored private let storageProvider: StorageProvider
     @ObservationIgnored private var loaded = false
 
-    /// Por defecto guarda en JSON; en pruebas se le pasa un MockStorageProvider.
-    init(storageProvider: StorageProvider = JSONStorageProvider()) {
+    /// Usa el motor de persistencia configurado por traits (JSON, CoreData o Mock en memoria).
+    init(storageProvider: StorageProvider = StorageFactory.makeDefault()) {
         self.storageProvider = storageProvider
         _Concurrency.Task { await loadBooks() }
     }
