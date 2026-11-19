@@ -25,7 +25,6 @@ struct BookListView: View {
                             backButton
                         }
 #endif
-                        .frame(height: 48)
                     }
             } else {
                 List {
@@ -122,6 +121,7 @@ struct BookListView: View {
         Button("<- Back") {
             selectedBookID = nil
         }
+        .frame(height: 48)
     }
 
     /// Binding para que el detalle edite el libro a través del ViewModel.
