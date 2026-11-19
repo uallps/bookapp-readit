@@ -74,30 +74,30 @@ struct BookRowView: View {
 #if Prioridades
     private func priorityText(for priority: Priority) -> String {
         switch priority {
-        case .high, .alta: return "Alta"
-        case .medium, .media: return "Media"
-        case .low, .baja: return "Baja"
+        case .high: return "Alta"
+        case .medium: return "Media"
+        case .low: return "Baja"
         }
     }
 
     private func priorityBackgroundColor(for priority: Priority) -> Color {
         switch priority {
-        case .high, .alta:
+        case .high:
             return Color.red.opacity(0.18)
-        case .medium, .media:
+        case .medium:
             return Color.orange.opacity(0.18)
-        case .low, .baja:
+        case .low:
             return Color.gray.opacity(0.18)
         }
     }
 
     private func priorityTextColor(for priority: Priority) -> Color {
         switch priority {
-        case .high, .alta:
+        case .high:
             return .red
-        case .medium, .media:
+        case .medium:
             return .orange
-        case .low, .baja:
+        case .low:
             return .secondary
         }
     }
