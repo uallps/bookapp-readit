@@ -15,11 +15,14 @@ struct SettingsView: View {
                 // Solo compila si el trait Progreso está activo
                 Toggle("Activar progreso de lectura", isOn: $config.enableProgress)
 #endif
-
 #if Temporizador
                 Toggle("Activar temporizador de lectura", isOn: $config.enableTimer)
 #endif
+            }
 
+            Section(header: Text("Persistencia (O5)")) {
+                Text("Motor activo: \(StorageFactory.activeEngineName)")
+                    .foregroundColor(.secondary)
             }
         }
         .navigationTitle("Ajustes")

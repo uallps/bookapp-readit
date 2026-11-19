@@ -19,6 +19,8 @@ let package = Package(
         .trait(name: "Prioridades", description: "Característica opcional: prioridad del libro"),
         .trait(name: "Progreso", description: "Característica opcional F1: Progreso de lectura"),
         .trait(name: "Temporizador", description: "Característica opcional O4: Temporizador de lectura en vivo"),
+        .trait(name: "PersistenciaJSON", description: "Característica opcional O5 (XOR): Persistencia local en JSON"),
+        .trait(name: "PersistenciaCoreData", description: "Característica opcional O5 (XOR): Persistencia local estructurada (Core Data / Binario)"),
     ],
     dependencies: [
         .package(url: "https://github.com/uallps/SwiftOpenUI.git", branch: "uallps"),
