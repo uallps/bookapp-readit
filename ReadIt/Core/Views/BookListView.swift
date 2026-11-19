@@ -12,11 +12,19 @@ struct BookListView: View {
             if let book = selectedBook {
                 BookDetailView(book: binding(for: book), availableCategories: categories)
                     .toolbar {
-                        ToolbarItem(placement: .leading) {
-                            Button("<- Back") {
-                                selectedBookID = nil
-                            }
+#if os(macOS)
+                        ToolbarItem(placement: .navigation) {
+                            backButton
                         }
+#elseif os(iOS)
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            backButton
+                        }
+#else
+                        ToolbarItem(placement: .leading) {
+                            backButton
+                        }
+#endif
                         .frame(height: 48)
                     }
             } else {
@@ -81,19 +89,38 @@ struct BookListView: View {
         .buttonStyle(.plain)
     }
 
-    /// Una fila: enlace al detalle del libro, con menú contextual para borrarlo.
+    /// Fila con control de estado, acceso al detalle y menú contextual.
     private func bookRow(book: Book) -> some View {
-        Button(action: { selectedBookID = book.id }) {
-            BookRowView(
-                book: book,
-                showDueDates: config.showDueDates,
-                showPriorities: config.showPriorities
-            )
-            .contextMenu {
-                Button("Eliminar libro") {
-                    viewModel.removeBook(id: book.id)
+        HStack(spacing: 8) {
+            Button {
+                let newState: ReadingState = book.state == .finished ? .pending : .finished
+                viewModel.updateState(id: book.id, to: newState)
+            } label: {
+                Image(systemName: book.state == .finished ? "checkmark.circle.fill" : "circle")
+                    .frame(width: 24, height: 24)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(book.state == .finished ? "Marcar como pendiente" : "Marcar como terminado")
+
+            Button(action: { selectedBookID = book.id }) {
+                BookRowView(
+                    book: book,
+                    showDueDates: config.showDueDates,
+                    showPriorities: config.showPriorities
+                )
+                .contextMenu {
+                    Button("Eliminar libro") {
+                        viewModel.removeBook(id: book.id)
+                    }
                 }
             }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var backButton: some View {
+        Button("<- Back") {
+            selectedBookID = nil
         }
     }
 

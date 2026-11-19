@@ -55,6 +55,7 @@ try {
     # Marcar un libro no debe abrir el detalle.
     Click-Toggle "1984"; Snap $w "2-tercer-libro-marcado"
     if ((Count-Text "1984") -ne 1) { throw "Al marcar el libro se ha salido de la lista" }
+    if ((Count-Text "Pendiente") -ne 2) { throw "El botón de marcar no ha cambiado el estado de 1984" }
 
     # Editar el título en el detalle debe actualizar la lista.
     if (-not (Click-Text $w "Dune")) { throw "No está el libro Dune" }
