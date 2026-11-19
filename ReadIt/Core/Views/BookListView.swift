@@ -90,18 +90,18 @@ struct BookListView: View {
 
     /// Fila con control de estado, acceso al detalle y menú contextual.
     private func bookRow(book: Book) -> some View {
-        HStack(spacing: 8) {
-            Button {
-                let newState: ReadingState = book.state == .finished ? .pending : .finished
-                viewModel.updateState(id: book.id, to: newState)
-            } label: {
-                Image(systemName: book.state == .finished ? "checkmark.circle.fill" : "circle")
-                    .frame(width: 24, height: 24)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(book.state == .finished ? "Marcar como pendiente" : "Marcar como terminado")
+        Button(action: { selectedBookID = book.id }) {
+            HStack(spacing: 8) {
+                Button {
+                    let newState: ReadingState = book.state == .finished ? .pending : .finished
+                    viewModel.updateState(id: book.id, to: newState)
+                } label: {
+                    Image(systemName: book.state == .finished ? "checkmark.circle.fill" : "circle")
+                        .frame(width: 24, height: 24)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(book.state == .finished ? "Marcar como pendiente" : "Marcar como terminado")
 
-            Button(action: { selectedBookID = book.id }) {
                 BookRowView(
                     book: book,
                     showDueDates: config.showDueDates,
@@ -113,8 +113,8 @@ struct BookListView: View {
                     }
                 }
             }
-            .buttonStyle(.plain)
         }
+        .buttonStyle(.plain)
     }
 
     private var backButton: some View {
