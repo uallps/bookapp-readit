@@ -24,25 +24,29 @@ class "Estado de lectura" as Estado <<Obligatoria>>
 ' ==========================================
 ' COMUNES (F1 - F5)
 ' ==========================================
-class "Progreso (F1)" as F1 <<Opcional>>
-class "Notas y citas (F2)" as F2 <<Opcional>>
-class "Categorías (F3)" as F3 <<Opcional>>
-class "Valoraciones (F4)" as F4 <<Opcional>>
-class "Estadísticas (F5)" as F5 <<Opcional>>
+class "Progreso (F1)\n[Jesús]" as F1 <<Opcional>>
+class "Notas y citas (F2)\n[Carmen]" as F2 <<Opcional>>
+class "Categorías (F3)\n[Sergio]" as F3 <<Opcional>>
+class "Valoraciones (F4)\n[Adrián]" as F4 <<Opcional>>
+class "Estadísticas (F5)\n[Marian]" as F5 <<Opcional>>
 
 ' ==========================================
-' ORIGINALES (O1 - O5 del grupo ReadIT)
+' ORIGINALES (O1 - O10 del grupo ReadIT)
 ' ==========================================
-class "Prioridad Lectura (O1)" as O1 <<Opcional>>
-class "Fecha Objetivo (O2)" as O2 <<Opcional>>
-class "Recordatorios (O3)" as O3 <<Opcional>>
-class "Temporizador Vivo (O4)" as O4 <<Opcional>>
-class "Persistencia (O5)" as O5 <<Opcional>>
+class "Prioridad Lectura (O1)\n[Carmen]" as O1 <<Opcional>>
+class "Fecha Objetivo (O2)\n[Adrián]" as O2 <<Opcional>>
+class "Recordatorios (O3)\n[Adrián]" as O3 <<Opcional>>
+class "Temporizador Vivo (O4)\n[Jesús]" as O4 <<Opcional>>
+class "Persistencia (O5)\n[Jesús]" as O5 <<Opcional>>
+class "Reto Anual (O6)\n[Marian]" as O6 <<Opcional>>
+class "Lista de Deseos (O7)\n[Carmen]" as O7 <<Opcional>>
+class "Alertas Contenido (O8)\n[Sergio]" as O8 <<Opcional>>
+class "Registro Actividad (O9)\n[Marian]" as O9 <<Opcional>>
+class "Búsqueda y Orden (O10)\n[Sergio]" as O10 <<Opcional>>
 
 ' Variabilidad técnica de la Persistencia
 class "JSON" as JSON <<XOR>>
 class "Core Data" as CoreData <<XOR>>
-
 
 ' ==========================================
 ' CONSTRUCCIÓN DEL ÁRBOL
@@ -62,6 +66,11 @@ Root o-- O2
 Root o-- O3
 Root o-- O4
 Root o-- O5
+Root o-- O6
+Root o-- O7
+Root o-- O8
+Root o-- O9
+Root o-- O10
 
 O5 *-- JSON
 O5 *-- CoreData

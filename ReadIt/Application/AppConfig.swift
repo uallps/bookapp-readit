@@ -37,6 +37,11 @@ final class AppConfig {
         didSet { store(enableStats, forKey: "enableStats") }
     }
 
+    // O4: Temporizador en vivo (desactivado por defecto)
+    var enableTimer: Bool {
+        didSet { store(enableTimer, forKey: "enableTimer") }
+    }
+
     @ObservationIgnored private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
@@ -50,6 +55,9 @@ final class AppConfig {
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
         enableRatings = defaults.object(forKey: "enableRatings") as? Bool ?? false
         enableStats = defaults.object(forKey: "enableStats") as? Bool ?? false
+
+        //04: Temporizador en vivo
+        enableTimer = defaults.object(forKey: "enableTimer") as? Bool ?? false
     }
 
     private func store(_ value: Bool, forKey key: String) {
