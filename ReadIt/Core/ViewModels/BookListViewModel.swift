@@ -4,12 +4,24 @@ import Observation
 @Observable
 final class BookListViewModel {
     /// Cada cambio en la lista (marcar, añadir, borrar o editar en el detalle) se guarda.
-    var books: [Book] = [
-        Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
-        Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
-        Book(title: "1984", author: "George Orwell", state: .finished)
-    ] {
+    var books: [Book] = BookListViewModel.sampleBooks {
         didSet { save() }
+    }
+
+    private static var sampleBooks: [Book] {
+#if Prioridades
+        [
+            Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
+            Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
+            Book(title: "1984", author: "George Orwell", state: .finished)
+        ]
+#else
+        [
+            Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading),
+            Book(title: "Dune", author: "Frank Herbert", state: .pending),
+            Book(title: "1984", author: "George Orwell", state: .finished)
+        ]
+#endif
     }
 
     @ObservationIgnored private let storageProvider: StorageProvider
@@ -38,7 +50,6 @@ final class BookListViewModel {
     }
 
     func addBook() {
-        // Asegúrate de inicializar con las propiedades obligatorias de tu modelo Book
         books.append(Book(title: "Libro de ejemplo", state: .pending))
     }
 
