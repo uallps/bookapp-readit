@@ -16,6 +16,9 @@ struct Book: Identifiable, Codable {
 #if Categorias
     var categories: [String] = []
 #endif
+#if AlertasContenido
+    var hasSensitiveContent = false
+#endif
 
     var dueDate: Date?
 #if Prioridades
@@ -52,6 +55,9 @@ struct Book: Identifiable, Codable {
 #if Categorias
         case categories, category
 #endif
+#if AlertasContenido
+        case hasSensitiveContent
+#endif
 #if Prioridades
         case priority
 #endif
@@ -78,6 +84,9 @@ struct Book: Identifiable, Codable {
         }
         categories = Self.normalizedCategories(decodedCategories)
 #endif
+#if AlertasContenido
+        hasSensitiveContent = try container.decodeIfPresent(Bool.self, forKey: .hasSensitiveContent) ?? false
+#endif
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
 
 #if Prioridades
@@ -101,6 +110,9 @@ struct Book: Identifiable, Codable {
         try container.encode(state, forKey: .state)
 #if Categorias
         try container.encode(categories, forKey: .categories)
+#endif
+#if AlertasContenido
+        try container.encode(hasSensitiveContent, forKey: .hasSensitiveContent)
 #endif
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
 #if Prioridades

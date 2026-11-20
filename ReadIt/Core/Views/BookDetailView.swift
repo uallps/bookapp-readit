@@ -42,6 +42,10 @@ struct BookDetailView: View {
             }
 #endif
 
+#if AlertasContenido
+            ContentAlertDetailsView(book: $book)
+#endif
+
 #if Categorias
             CategoryManagementView(book: $book, availableCategories: availableCategories)
 #endif

@@ -36,6 +36,11 @@ final class AppConfig {
         didSet { store(enableCategories, forKey: "enableCategories") }
     }
 #endif
+#if AlertasContenido
+    var enableContentAlerts: Bool {
+        didSet { store(enableContentAlerts, forKey: "enableContentAlerts") }
+    }
+#endif
 
     // F4: Valoraciones
     var enableRatings: Bool {
@@ -74,6 +79,9 @@ final class AppConfig {
 
 #if Categorias
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
+#endif
+#if AlertasContenido
+        enableContentAlerts = defaults.object(forKey: "enableContentAlerts") as? Bool ?? true
 #endif
         enableRatings = defaults.object(forKey: "enableRatings") as? Bool ?? false
         enableStats = defaults.object(forKey: "enableStats") as? Bool ?? false

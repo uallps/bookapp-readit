@@ -18,6 +18,9 @@ struct SettingsView: View {
 #if Categorias
                 Toggle("Activar categorías", isOn: $config.enableCategories)
 #endif
+#if AlertasContenido
+                Toggle("Mostrar alertas de contenido sensible", isOn: $config.enableContentAlerts)
+#endif
 #if Temporizador
                 Toggle("Activar temporizador de lectura", isOn: $config.enableTimer)
 #endif

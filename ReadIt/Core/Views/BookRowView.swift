@@ -20,6 +20,10 @@ struct BookRowView: View {
                     Text(book.title)
                         .font(.headline)
 
+#if AlertasContenido
+                    ContentAlertBadge(isSensitive: book.hasSensitiveContent)
+#endif
+
 #if Prioridades
                     // Píldora de prioridad (Alta / Media / Baja)
                     if showPriorities, let priority = book.priority {

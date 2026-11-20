@@ -23,6 +23,7 @@ let package = Package(
         .trait(name: "PersistenciaCoreData", description: "Característica opcional O5 (XOR): Persistencia local estructurada (Core Data / Binario)"),
         .trait(name: "Notas", description: "Característica opcional F2: Notas y citas"),
         .trait(name: "Categorias", description: "Característica opcional F3: Categorías"),
+        .trait(name: "AlertasContenido", description: "Característica opcional O8: Alertas de contenido sensible"),
         .trait(name: "ListaDeseos", description: "Característica opcional: Lista de deseos"),
     ],
     dependencies: [
