@@ -10,6 +10,9 @@ struct BookListView: View {
 #if ListaDeseos
     @State private var showingWishlist = false
 #endif
+#if BusquedaOrden
+    @State private var searchSortViewModel = BookSearchSortViewModel()
+#endif
     /// La configuración la crea la app y llega por el entorno: es la misma que edita Ajustes.
     @Environment(AppConfig.self) private var config
 
@@ -34,6 +37,13 @@ struct BookListView: View {
                     }
             } else {
                 List {
+#if BusquedaOrden
+                    if config.enableSearchAndSort {
+                        Section {
+                            BookSearchSortControls(viewModel: searchSortViewModel)
+                        }
+                    }
+#endif
                     if shouldShowFilterSection {
                         Section {
 #if Categorias
@@ -102,17 +112,23 @@ struct BookListView: View {
 #endif
 
     private var filteredBooks: [Book] {
+        var books = viewModel.books
 #if ListaDeseos
         if showingWishlist {
-            return viewModel.books.filter { $0.isWishlist }
+            books = books.filter { $0.isWishlist }
         }
 #endif
 #if Categorias
         if config.enableCategories, selectedCategory != nil {
-            return categoriesViewModel.filteredBooks(viewModel.books, by: selectedCategory)
+            books = categoriesViewModel.filteredBooks(books, by: selectedCategory)
         }
 #endif
-        return viewModel.books
+#if BusquedaOrden
+        if config.enableSearchAndSort {
+            books = searchSortViewModel.filteredAndSortedBooks(books)
+        }
+#endif
+        return books
     }
 
 #if ListaDeseos

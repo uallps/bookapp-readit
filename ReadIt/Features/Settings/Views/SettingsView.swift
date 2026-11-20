@@ -18,6 +18,9 @@ struct SettingsView: View {
 #if Categorias
                 Toggle("Activar categorías", isOn: $config.enableCategories)
 #endif
+#if BusquedaOrden
+                Toggle("Activar búsqueda y ordenación", isOn: $config.enableSearchAndSort)
+#endif
 #if AlertasContenido
                 Toggle("Mostrar alertas de contenido sensible", isOn: $config.enableContentAlerts)
 #endif

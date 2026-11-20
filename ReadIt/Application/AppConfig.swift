@@ -36,6 +36,11 @@ final class AppConfig {
         didSet { store(enableCategories, forKey: "enableCategories") }
     }
 #endif
+#if BusquedaOrden
+    var enableSearchAndSort: Bool {
+        didSet { store(enableSearchAndSort, forKey: "enableSearchAndSort") }
+    }
+#endif
 #if AlertasContenido
     var enableContentAlerts: Bool {
         didSet { store(enableContentAlerts, forKey: "enableContentAlerts") }
@@ -79,6 +84,9 @@ final class AppConfig {
 
 #if Categorias
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
+#endif
+#if BusquedaOrden
+        enableSearchAndSort = defaults.object(forKey: "enableSearchAndSort") as? Bool ?? true
 #endif
 #if AlertasContenido
         enableContentAlerts = defaults.object(forKey: "enableContentAlerts") as? Bool ?? true
