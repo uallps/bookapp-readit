@@ -28,6 +28,12 @@ struct ReadItApp: App {
                         .tabItem { Label("Temporizador", systemImage: "timer") }
                 }
 #endif
+#if Estadisticas
+                if config.enableStats {
+                    StatsView()
+                        .tabItem { Label("Estadísticas", systemImage: "chart.bar") }
+                }
+#endif
                 SettingsView()
                     .tabItem { Label("Ajustes", systemImage: "gearshape") }
             }
@@ -52,6 +58,13 @@ struct ReadItApp: App {
                         }
                     }
 #endif
+#if Estadisticas
+                    if config.enableStats {
+                        NavigationLink(value: "estadisticas") {
+                            Label("Estadísticas", systemImage: "chart.bar")
+                        }
+                    }
+#endif
                     NavigationLink(value: "ajustes") {
                         Label("Ajustes", systemImage: "gearshape")
                     }
@@ -66,6 +79,14 @@ struct ReadItApp: App {
                         ReadingTimerView()
                     } else {
                         Text("Activa el temporizador en Ajustes")
+                    }
+#endif
+#if Estadisticas
+                case "estadisticas":
+                    if config.enableStats {
+                        StatsView()
+                    } else {
+                        Text("Activa las estadísticas en Ajustes")
                     }
 #endif
                 case "ajustes":

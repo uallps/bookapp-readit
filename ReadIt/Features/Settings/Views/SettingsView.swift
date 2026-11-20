@@ -18,6 +18,9 @@ struct SettingsView: View {
 #if Temporizador
                 Toggle("Activar temporizador de lectura", isOn: $config.enableTimer)
 #endif
+#if Estadisticas
+                Toggle("Activar estadísticas de lectura", isOn: $config.enableStats)
+#endif
             }
 
             Section(header: Text("Persistencia (O5)")) {

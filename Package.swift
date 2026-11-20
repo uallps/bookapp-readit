@@ -24,6 +24,11 @@ let package = Package(
         .trait(name: "Notas", description: "Característica opcional F2: Notas y citas"),
         .trait(name: "Categorias", description: "Característica opcional F3: Categorías"),
         .trait(name: "ListaDeseos", description: "Característica opcional: Lista de deseos"),
+        .trait(
+            name: "Estadisticas",
+            description: "Característica opcional F5: Estadísticas de lectura (requiere F1: Progreso)",
+            enabledTraits: ["Progreso"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/uallps/SwiftOpenUI.git", branch: "uallps"),
