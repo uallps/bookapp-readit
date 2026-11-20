@@ -16,11 +16,7 @@ struct BookListView: View {
     var body: some View {
         NavigationStack {
             if let book = selectedBook {
-#if Categorias
-                BookDetailView(book: binding(for: book), availableCategories: categories)
-#else
-                BookDetailView(book: binding(for: book))
-#endif
+                detailView(for: book)
                     .toolbar {
 #if os(macOS)
                         ToolbarItem(placement: .navigation) {
@@ -81,6 +77,14 @@ struct BookListView: View {
     private var selectedBook: Book? {
         guard let selectedBookID else { return nil }
         return viewModel.book(id: selectedBookID)
+    }
+
+    private func detailView(for book: Book) -> some View {
+#if Categorias
+        BookDetailView(book: binding(for: book), availableCategories: categories)
+#else
+        BookDetailView(book: binding(for: book))
+#endif
     }
 
 #if Categorias
