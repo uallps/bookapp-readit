@@ -43,10 +43,12 @@ struct BookRowView: View {
                         .foregroundColor(.secondary)
                 }
 
-                if !book.categories.isEmpty {
+#if Categorias
+                if config.enableCategories, !book.categories.isEmpty {
                     Text("Categorías: \(book.categories.joined(separator: ", "))")
                         .bookCaption()
                 }
+#endif
                 
                 // Feature opcional: Fechas (si la mantenéis de TaskApp)
                 if showDueDates, let dueDate = book.dueDate {
@@ -69,17 +71,23 @@ struct BookRowView: View {
 
             Spacer()
 
-            // Columna derecha: Píldora de estado de lectura (Leyendo / Pendiente / Terminado)
-            Text(book.state.rawValue)
-                .font(.caption)
-                .bold()
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(
-                    Capsule()
-                        .fill(colorForState(book.state))
-                )
-                .foregroundColor(.white)
+            // Columna derecha: estado de lectura y aviso +18, centrados verticalmente.
+            HStack(spacing: 8) {
+                Text(book.state.rawValue)
+                    .font(.caption)
+                    .bold()
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(
+                        Capsule()
+                            .fill(colorForState(book.state))
+                    )
+                    .foregroundColor(.white)
+
+#if AlertasContenido
+                ContentAlertBadge(isSensitive: book.hasSensitiveContent)
+#endif
+            }
         }
         .padding(.vertical, 4)
     }

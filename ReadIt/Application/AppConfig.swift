@@ -31,10 +31,21 @@ final class AppConfig {
     }
 #endif
 
-    // F3: Categorías
+#if Categorias
     var enableCategories: Bool {
         didSet { store(enableCategories, forKey: "enableCategories") }
     }
+#endif
+#if BusquedaOrden
+    var enableSearchAndSort: Bool {
+        didSet { store(enableSearchAndSort, forKey: "enableSearchAndSort") }
+    }
+#endif
+#if AlertasContenido
+    var enableContentAlerts: Bool {
+        didSet { store(enableContentAlerts, forKey: "enableContentAlerts") }
+    }
+#endif
 
     // F4: Valoraciones
     var enableRatings: Bool {
@@ -71,7 +82,15 @@ final class AppConfig {
         enableWishlist = defaults.object(forKey: "enableWishlist") as? Bool ?? true
 #endif
 
+#if Categorias
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
+#endif
+#if BusquedaOrden
+        enableSearchAndSort = defaults.object(forKey: "enableSearchAndSort") as? Bool ?? true
+#endif
+#if AlertasContenido
+        enableContentAlerts = defaults.object(forKey: "enableContentAlerts") as? Bool ?? true
+#endif
         enableRatings = defaults.object(forKey: "enableRatings") as? Bool ?? false
         enableStats = defaults.object(forKey: "enableStats") as? Bool ?? false
 
