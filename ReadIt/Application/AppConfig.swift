@@ -31,10 +31,11 @@ final class AppConfig {
     }
 #endif
 
-    // F3: Categorías
+#if Categorias
     var enableCategories: Bool {
         didSet { store(enableCategories, forKey: "enableCategories") }
     }
+#endif
 
     // F4: Valoraciones
     var enableRatings: Bool {
@@ -71,7 +72,9 @@ final class AppConfig {
         enableWishlist = defaults.object(forKey: "enableWishlist") as? Bool ?? true
 #endif
 
+#if Categorias
         enableCategories = defaults.object(forKey: "enableCategories") as? Bool ?? false
+#endif
         enableRatings = defaults.object(forKey: "enableRatings") as? Bool ?? false
         enableStats = defaults.object(forKey: "enableStats") as? Bool ?? false
 

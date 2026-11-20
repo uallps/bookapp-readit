@@ -3,14 +3,24 @@ import SwiftUI
 struct BookListView: View {
     @State private var viewModel = BookListViewModel()
     @State private var selectedBookID: UUID?
-    @State private var selectedCategory = CategoryFilter.all
+#if Categorias
+    @State private var categoriesViewModel = CategoriesViewModel()
+    @State private var selectedCategory: String?
+#endif
+#if ListaDeseos
+    @State private var showingWishlist = false
+#endif
     /// La configuración la crea la app y llega por el entorno: es la misma que edita Ajustes.
     @Environment(AppConfig.self) private var config
 
     var body: some View {
         NavigationStack {
             if let book = selectedBook {
+#if Categorias
                 BookDetailView(book: binding(for: book), availableCategories: categories)
+#else
+                BookDetailView(book: binding(for: book))
+#endif
                     .toolbar {
 #if os(macOS)
                         ToolbarItem(placement: .navigation) {
@@ -28,21 +38,29 @@ struct BookListView: View {
                     }
             } else {
                 List {
-                    Section(header: Text("Filtrar por categoría")) {
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 8) {
-                                categoryButton("Todas", filter: .all)
-
+                    if shouldShowFilterSection {
+                        Section {
+#if Categorias
+                            CategoryFilterView(
+                                categories: categories,
+                                selectedCategory: $selectedCategory,
+                                isAllSelected: isAllCategorySelected
+                            ) {
 #if ListaDeseos
-                                if config.enableWishlist {
-                                    categoryButton("Wishlist", filter: .wishlist)
-                                }
+                                showingWishlist = false
 #endif
-
-                                ForEach(categories, id: \.self) { category in
-                                    categoryButton(category, filter: .category(category))
+                            }
+#endif
+#if ListaDeseos
+                            if config.enableWishlist {
+                                filterButton("Wishlist", isSelected: showingWishlist) {
+                                    showingWishlist = true
+#if Categorias
+                                    selectedCategory = nil
+#endif
                                 }
                             }
+#endif
                         }
                     }
 
@@ -65,44 +83,57 @@ struct BookListView: View {
         return viewModel.book(id: selectedBookID)
     }
 
+#if Categorias
     private var categories: [String] {
-        var result: [String] = []
-        for category in Set(viewModel.books.flatMap(\.categories)).sorted()
-        where !result.contains(where: { $0.caseInsensitiveCompare(category) == .orderedSame }) {
-            result.append(category)
-        }
-        return result
+        categoriesViewModel.categories(in: viewModel.books)
     }
 
-    private var filteredBooks: [Book] {
-        switch selectedCategory {
-        case .all:
-            return viewModel.books
-
+    private var isAllCategorySelected: Bool {
 #if ListaDeseos
-        case .wishlist:
-            return viewModel.books.filter { $0.isWishlist }
+        selectedCategory == nil && !showingWishlist
+#else
+        selectedCategory == nil
+#endif
+    }
 #endif
 
-        case .category(let category):
-            guard categories.contains(category) else { return viewModel.books }
-            return viewModel.books.filter { book in
-                book.categories.contains { $0.caseInsensitiveCompare(category) == .orderedSame }
-            }
+    private var filteredBooks: [Book] {
+#if ListaDeseos
+        if showingWishlist {
+            return viewModel.books.filter { $0.isWishlist }
         }
+#endif
+#if Categorias
+        if config.enableCategories, selectedCategory != nil {
+            return categoriesViewModel.filteredBooks(viewModel.books, by: selectedCategory)
+        }
+#endif
+        return viewModel.books
     }
 
-    private func categoryButton(_ title: String, filter: CategoryFilter) -> some View {
-        Button(action: { selectedCategory = filter }) {
+#if ListaDeseos
+    private func filterButton(_ title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
             Text(title)
                 .font(.subheadline)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 5)
-                .background(selectedCategory == filter ? Color.bookAccent : Color.secondary.opacity(0.15))
-                .foregroundColor(selectedCategory == filter ? .white : .primary)
+                .background(isSelected ? Color.bookAccent : Color.secondary.opacity(0.15))
+                .foregroundColor(isSelected ? .white : .primary)
                 .clipShape(Capsule())
         }
         .buttonStyle(.plain)
+    }
+#endif
+
+    private var shouldShowFilterSection: Bool {
+#if Categorias
+        if config.enableCategories { return true }
+#endif
+#if ListaDeseos
+        if config.enableWishlist { return true }
+#endif
+        return false
     }
 
     /// Fila con control de estado, acceso al detalle y menú contextual.
@@ -149,11 +180,4 @@ struct BookListView: View {
         )
     }
 
-    private enum CategoryFilter: Hashable {
-        case all
-#if ListaDeseos
-        case wishlist
-#endif
-        case category(String)
-    }
 }
