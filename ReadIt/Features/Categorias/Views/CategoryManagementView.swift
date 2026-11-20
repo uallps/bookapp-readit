@@ -27,22 +27,24 @@ struct CategoryManagementView: View {
                     Text("Este libro ya tiene todas las categorías existentes")
                         .foregroundColor(.secondary)
                 } else {
+#if SWIFT_PACKAGE
                     LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 100), alignment: .leading)],
+                        columns: [GridItem(.adaptive(minimum: 100))],
+                        data: availableCategoriesToAdd
+                    ) { category in
+                        categoryButton(category)
+                    }
+#else
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 100))],
                         alignment: .leading,
                         spacing: 8
                     ) {
                         ForEach(availableCategoriesToAdd, id: \.self) { category in
-                            Button(category) {
-                                book.addCategory(category)
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(Capsule().fill(Color.secondary.opacity(0.15)))
-                            .buttonStyle(.plain)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            categoryButton(category)
                         }
                     }
+#endif
                 }
             }
 
@@ -71,6 +73,17 @@ struct CategoryManagementView: View {
                 $0.caseInsensitiveCompare(category) == .orderedSame
             }
         }
+    }
+
+    private func categoryButton(_ category: String) -> some View {
+        Button(category) {
+            book.addCategory(category)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Capsule().fill(Color.secondary.opacity(0.15)))
+        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 #endif
