@@ -10,6 +10,42 @@ struct CategoryManagementView: View {
 
     var body: some View {
         if config.enableCategories {
+            Section(header: Text("Crear categoría")) {
+                TextField("Nombre de la categoría", text: $newCategory)
+                Button("Añadir categoría") {
+                    book.addCategory(newCategory)
+                    newCategory = ""
+                }
+                .disabled(newCategory.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+
+            Section(header: Text("Añadir categoría existente")) {
+                if availableCategories.isEmpty {
+                    Text("Todavía no hay categorías en la biblioteca")
+                        .foregroundColor(.secondary)
+                } else if availableCategoriesToAdd.isEmpty {
+                    Text("Este libro ya tiene todas las categorías existentes")
+                        .foregroundColor(.secondary)
+                } else {
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 100), alignment: .leading)],
+                        alignment: .leading,
+                        spacing: 8
+                    ) {
+                        ForEach(availableCategoriesToAdd, id: \.self) { category in
+                            Button(category) {
+                                book.addCategory(category)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Capsule().fill(Color.secondary.opacity(0.15)))
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                }
+            }
+
             Section(header: Text("Categorías asignadas")) {
                 if book.categories.isEmpty {
                     Text("Sin categorías")
@@ -25,31 +61,6 @@ struct CategoryManagementView: View {
                         }
                     }
                 }
-            }
-
-            Section(header: Text("Añadir categoría existente")) {
-                if availableCategories.isEmpty {
-                    Text("Todavía no hay categorías en la biblioteca")
-                        .foregroundColor(.secondary)
-                } else if availableCategoriesToAdd.isEmpty {
-                    Text("Este libro ya tiene todas las categorías existentes")
-                        .foregroundColor(.secondary)
-                } else {
-                    ForEach(availableCategoriesToAdd, id: \.self) { category in
-                        Button(category) {
-                            book.addCategory(category)
-                        }
-                    }
-                }
-            }
-
-            Section(header: Text("Crear categoría")) {
-                TextField("Nombre de la categoría", text: $newCategory)
-                Button("Añadir categoría") {
-                    book.addCategory(newCategory)
-                    newCategory = ""
-                }
-                .disabled(newCategory.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
         }
     }
