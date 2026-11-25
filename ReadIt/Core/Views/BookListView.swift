@@ -44,6 +44,14 @@ struct BookListView: View {
                         }
                     }
 #endif
+#if Recordatorios && FechaObjetivo
+                    // Panel de recordatorios y avisos de vencimiento (O3)
+                    if config.enableReminders {
+                        Section(header: Text("Recordatorios")) {
+                            RemindersBannerView(books: viewModel.books)
+                        }
+                    }
+#endif
                     if shouldShowFilterSection {
                         Section {
 #if Categorias
