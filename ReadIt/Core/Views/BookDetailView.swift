@@ -77,7 +77,7 @@ struct BookDetailView: View {
                                 progressVM.updateProgress(bookId: book.id, current: newValue, total: totalPages)
                             }
 
-                        Stepper("Total de páginas: \(totalPages)", value: $totalPages, in: 0...10000)
+                        Stepper("Total de páginas: \(totalPages)", value: $totalPages, in: 0...max(totalPages, 10000))
                             .onChange(of: totalPages) { _, newValue in
                                 progressVM.updateProgress(bookId: book.id, current: currentPage, total: newValue)
                             }
@@ -105,6 +105,15 @@ struct BookDetailView: View {
             if config.enableRatings {
                 Section(header: Text("Valoración y reseña")) {
                     RatingView(rating: $book.rating)
+                }
+            }
+#endif
+
+#if FechaObjetivo
+            // Fecha objetivo (O2)
+            if config.showDueDates {
+                Section(header: Text("Fecha objetivo")) {
+                    DueDateView(dueDate: $book.dueDate)
                 }
             }
 #endif

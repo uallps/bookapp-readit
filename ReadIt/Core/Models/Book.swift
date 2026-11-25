@@ -20,7 +20,11 @@ struct Book: Identifiable, Codable {
     var hasSensitiveContent = false
 #endif
 
+#if FechaObjetivo
+    // Fecha límite para terminar el libro (O2)
     var dueDate: Date?
+#endif
+
 #if Prioridades
     var priority: Priority?
 #endif
@@ -40,7 +44,7 @@ struct Book: Identifiable, Codable {
     var rating: BookRating = BookRating()
 #endif
 
-    // Initializer base explícito
+    // Initializer base explícito (dejamos dueDate en el init para no romper Categorias ni Prioridades)
     init(
         id: UUID = UUID(),
         title: String,
@@ -52,11 +56,16 @@ struct Book: Identifiable, Codable {
         self.title = title
         self.author = author
         self.state = state
+#if FechaObjetivo
         self.dueDate = dueDate
+#endif
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, title, author, state, dueDate
+        case id, title, author, state
+#if FechaObjetivo
+        case dueDate
+#endif
 #if Categorias
         case categories, category
 #endif
@@ -95,7 +104,9 @@ struct Book: Identifiable, Codable {
 #if AlertasContenido
         hasSensitiveContent = try container.decodeIfPresent(Bool.self, forKey: .hasSensitiveContent) ?? false
 #endif
+#if FechaObjetivo
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
+#endif
 
 #if Prioridades
         priority = try container.decodeIfPresent(Priority.self, forKey: .priority)
@@ -126,7 +137,9 @@ struct Book: Identifiable, Codable {
 #if AlertasContenido
         try container.encode(hasSensitiveContent, forKey: .hasSensitiveContent)
 #endif
+#if FechaObjetivo
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
+#endif
 #if Prioridades
         try container.encodeIfPresent(priority, forKey: .priority)
 #endif
