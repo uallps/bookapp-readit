@@ -7,7 +7,10 @@ struct SettingsView: View {
         @Bindable var config = config
         Form {
             Section(header: Text("Características")) {
+#if FechaObjetivo
+                // Fecha objetivo (O2)
                 Toggle("Mostrar fecha objetivo", isOn: $config.showDueDates)
+#endif
 #if Prioridades
                 Toggle("Mostrar prioridades", isOn: $config.showPriorities)
 #endif

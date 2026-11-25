@@ -49,12 +49,14 @@ struct BookRowView: View {
                         .bookCaption()
                 }
 #endif
-                
-                // Feature opcional: Fechas (si la mantenéis de TaskApp)
+
+#if FechaObjetivo
+                // Fecha objetivo (O2)
                 if showDueDates, let dueDate = book.dueDate {
-                    Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .shortened))")
+                    Text("Vence: \(dueDate.formatted(date: .abbreviated, time: .omitted))")
                         .bookCaption()
                 }
+#endif
 
 #if Progreso
                 if config.enableProgress {
