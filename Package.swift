@@ -28,6 +28,7 @@ let package = Package(
         .trait(name: "BusquedaOrden", description: "Característica opcional O10: Búsqueda y ordenación"),
         .trait(name: "Valoraciones", description: "Característica opcional F4: Valoraciones y reseñas"),
         .trait(name: "FechaObjetivo", description: "Característica opcional O2: Fecha objetivo de lectura"),
+        .trait(name: "Recordatorios", description: "Característica opcional O3: Recordatorios y avisos de vencimiento"),
     ],
     dependencies: [
         .package(url: "https://github.com/uallps/SwiftOpenUI.git", branch: "uallps"),

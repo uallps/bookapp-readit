@@ -62,6 +62,13 @@ final class AppConfig {
         didSet { store(enableTimer, forKey: "enableTimer") }
     }
 
+#if Recordatorios
+    // O3: Recordatorios
+    var enableReminders: Bool {
+        didSet { store(enableReminders, forKey: "enableReminders") }
+    }
+#endif
+
     @ObservationIgnored private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
@@ -96,6 +103,11 @@ final class AppConfig {
 
         // O4: Temporizador en vivo
         enableTimer = defaults.object(forKey: "enableTimer") as? Bool ?? false
+
+#if Recordatorios
+        // Se activa por defecto cuando Recordatorios está compilado
+        enableReminders = defaults.object(forKey: "enableReminders") as? Bool ?? true
+#endif
     }
 
     private func store(_ value: Bool, forKey key: String) {

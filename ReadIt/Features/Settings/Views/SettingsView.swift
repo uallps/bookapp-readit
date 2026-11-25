@@ -11,6 +11,10 @@ struct SettingsView: View {
                 // Fecha objetivo (O2)
                 Toggle("Mostrar fecha objetivo", isOn: $config.showDueDates)
 #endif
+#if Recordatorios
+                // Recordatorios (O3)
+                Toggle("Activar recordatorios", isOn: $config.enableReminders)
+#endif
 #if Prioridades
                 Toggle("Mostrar prioridades", isOn: $config.showPriorities)
 #endif
