@@ -35,6 +35,11 @@ struct Book: Identifiable, Codable {
     var isWishlist: Bool = false
 #endif
 
+#if Valoraciones
+    // Valoración con estrellas y reseña (F4)
+    var rating: BookRating = BookRating()
+#endif
+
     // Initializer base explícito
     init(
         id: UUID = UUID(),
@@ -66,6 +71,9 @@ struct Book: Identifiable, Codable {
 #endif
 #if ListaDeseos
         case isWishlist
+#endif
+#if Valoraciones
+        case rating
 #endif
     }
 
@@ -100,6 +108,10 @@ struct Book: Identifiable, Codable {
 #if ListaDeseos
         isWishlist = try container.decodeIfPresent(Bool.self, forKey: .isWishlist) ?? false
 #endif
+
+#if Valoraciones
+        rating = try container.decodeIfPresent(BookRating.self, forKey: .rating) ?? BookRating()
+#endif
     }
 
     func encode(to encoder: Encoder) throws {
@@ -123,6 +135,9 @@ struct Book: Identifiable, Codable {
 #endif
 #if ListaDeseos
         try container.encode(isWishlist, forKey: .isWishlist)
+#endif
+#if Valoraciones
+        try container.encode(rating, forKey: .rating)
 #endif
     }
 

@@ -100,6 +100,14 @@ struct BookDetailView: View {
                 }
             }
 #endif
+
+#if Valoraciones
+            if config.enableRatings {
+                Section(header: Text("Valoración y reseña")) {
+                    RatingView(rating: $book.rating)
+                }
+            }
+#endif
         }
         .navigationTitle(book.title.isEmpty ? "Nuevo libro" : book.title)
     }
