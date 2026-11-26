@@ -53,8 +53,12 @@ final class BookListViewModel {
         books.append(Book(title: "Libro de ejemplo", state: .pending))
     }
 
+    /// Borra un libro y avisa al registro de plugins antes y después (patrón observador).
     func removeBook(id: UUID) {
+        guard let book = book(id: id) else { return }
+        PluginRegistry.shared.notifyBookWillBeDeleted(book)
         books.removeAll { $0.id == id }
+        PluginRegistry.shared.notifyBookDidDelete(id: id)
     }
 
     /// El libro con ese id, si sigue en la lista.

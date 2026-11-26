@@ -7,9 +7,16 @@ struct ReadItApp: App {
     @State private var selection: String? = "libros"
 
 #if Progreso
-    /// ViewModel independiente para F1, solo existe si se compila el producto con Progreso.
-    @State private var progressVM = ProgressViewModel()
+    @State private var progressVM: ProgressViewModel
 #endif
+
+    init() {
+#if Progreso
+        let progress = ProgressViewModel()
+        PluginRegistry.shared.register(progress)
+        _progressVM = State(wrappedValue: progress)
+#endif
+    }
 
 #if Temporizador
     /// ViewModel independiente para O4, solo existe si se compila el producto con Temporizador.
