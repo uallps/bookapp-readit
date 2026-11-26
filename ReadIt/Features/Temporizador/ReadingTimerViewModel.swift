@@ -3,7 +3,9 @@ import Foundation
 import Observation
 
 @Observable
-final class ReadingTimerViewModel {
+final class ReadingTimerViewModel: FeaturePlugin {
+    let name = "Temporizador de lectura"
+
     var elapsedSeconds: Int = 0
     var isRunning: Bool = false
     var totalAccumulatedSeconds: Int {
