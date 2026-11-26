@@ -10,25 +10,30 @@ struct ReadItApp: App {
     @State private var progressVM: ProgressViewModel
 #endif
 
+#if Temporizador
+    /// ViewModel independiente para O4, solo existe si se compila el producto con Temporizador.
+    @State private var timerVM: ReadingTimerViewModel
+#endif
+
     init() {
 #if Progreso
         let progress = ProgressViewModel()
         PluginRegistry.shared.register(progress)
         _progressVM = State(wrappedValue: progress)
 #endif
-    }
-
 #if Temporizador
-    /// ViewModel independiente para O4, solo existe si se compila el producto con Temporizador.
-    @State private var timerVM = ReadingTimerViewModel()
+        let timer = ReadingTimerViewModel()
+        PluginRegistry.shared.register(timer)
+        _timerVM = State(wrappedValue: timer)
 #endif
+    }
 
     var body: some Scene {
         WindowGroup {
 #if os(iOS)
             TabView {
-                BookListView(storageProvider: config.storageType.makeProvider()) // <--- CAMBIADO (1)
-                    .id(config.storageType) // <--- CAMBIADO (1)
+                BookListView(storageProvider: config.storageType.makeProvider())
+                    .id(config.storageType)
                     .tabItem { Label("Libros", systemImage: "books.vertical") }
 #if Temporizador
                 if config.enableTimer {
@@ -67,7 +72,7 @@ struct ReadItApp: App {
             } detail: {
                 switch selection {
                 case "libros":
-                    BookListView(storageProvider: config.storageType.makeProvider()) // <--- CAMBIADO (2)
+                    BookListView(storageProvider: config.storageType.makeProvider())
 #if Temporizador
                 case "temporizador":
                     if config.enableTimer {
