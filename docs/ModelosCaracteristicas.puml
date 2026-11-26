@@ -37,7 +37,7 @@ class "Prioridad Lectura (O1)\n[Carmen]" as O1 <<Opcional>>
 class "Fecha Objetivo (O2)\n[Adrián]" as O2 <<Opcional>>
 class "Recordatorios (O3)\n[Adrián]" as O3 <<Opcional>>
 class "Temporizador Vivo (O4)\n[Jesús]" as O4 <<Opcional>>
-class "Persistencia (O5)\n[Jesús]" as O5 <<Opcional>>
+class "Persistencia (O5)\n[Jesús]" as O5 <<Obligatoria>>
 class "Reto Anual (O6)\n[Marian]" as O6 <<Opcional>>
 class "Lista de Deseos (O7)\n[Carmen]" as O7 <<Opcional>>
 class "Alertas Contenido (O8)\n[Sergio]" as O8 <<Opcional>>
@@ -46,7 +46,7 @@ class "Búsqueda y Orden (O10)\n[Sergio]" as O10 <<Opcional>>
 
 ' Variabilidad técnica de la Persistencia
 class "JSON" as JSON <<XOR>>
-class "Core Data" as CoreData <<XOR>>
+class "SwiftData" as SwiftData <<XOR>>
 
 ' ==========================================
 ' CONSTRUCCIÓN DEL ÁRBOL
@@ -54,6 +54,8 @@ class "Core Data" as CoreData <<XOR>>
 Root *-- Core
 Core *-- Titulo
 Core *-- Estado
+
+Root *-- O5
 
 Root o-- F1
 Root o-- F2
@@ -65,7 +67,6 @@ Root o-- O1
 Root o-- O2
 Root o-- O3
 Root o-- O4
-Root o-- O5
 Root o-- O6
 Root o-- O7
 Root o-- O8
@@ -73,7 +74,7 @@ Root o-- O9
 Root o-- O10
 
 O5 *-- JSON
-O5 *-- CoreData
+O5 *-- SwiftData
 note on link: **XOR**
 
 ' ==========================================
