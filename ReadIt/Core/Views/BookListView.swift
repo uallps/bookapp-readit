@@ -4,7 +4,7 @@ struct BookListView: View {
     @State private var viewModel: BookListViewModel
     @State private var selectedBookID: UUID?
 #if Categorias
-    @State private var categoriesViewModel = CategoriesViewModel()
+    @Environment(CategoriesViewModel.self) private var categoriesViewModel
     @State private var selectedCategory: String?
 #endif
 #if ListaDeseos
