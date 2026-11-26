@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Feature flags en ejecución: qué características muestra la app.
+/// Feature flags en ejecución: qué características muestra la app y dónde guarda los libros.
 @Observable
 final class AppConfig {
     var showDueDates: Bool {
@@ -69,6 +69,11 @@ final class AppConfig {
     }
 #endif
 
+    // O5: Persistencia (JSON / SwiftData)  <--- NUEVO (1)
+    var storageType: StorageType {
+        didSet { store(storageType.rawValue, forKey: "storageType") }
+    }
+
     @ObservationIgnored private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
@@ -108,9 +113,13 @@ final class AppConfig {
         // Se activa por defecto cuando Recordatorios está compilado
         enableReminders = defaults.object(forKey: "enableReminders") as? Bool ?? true
 #endif
+
+        // <--- NUEVO (2)
+        storageType = StorageType(rawValue: defaults.string(forKey: "storageType") ?? "") ?? .json
     }
 
-    private func store(_ value: Bool, forKey key: String) {
+    // <--- CAMBIADO (3): de Bool a Any
+    private func store(_ value: Any, forKey key: String) {
         defaults.set(value, forKey: key)
         defaults.synchronize()
     }

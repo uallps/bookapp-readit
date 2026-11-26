@@ -39,10 +39,15 @@ struct SettingsView: View {
 #endif
             }
 
-            Section(header: Text("Persistencia (O5)")) {
-                Text("Motor activo: \(StorageFactory.activeEngineName)")
-                    .foregroundColor(.secondary)
+#if canImport(SwiftData)
+            Section(header: Text("Almacenamiento")) {
+                Picker("Guardar los libros en", selection: $config.storageType) {
+                    ForEach(StorageType.allCases) { type in
+                        Text(type.rawValue).tag(type)
+                    }
+                }
             }
+#endif
         }
         .navigationTitle("Ajustes")
     }

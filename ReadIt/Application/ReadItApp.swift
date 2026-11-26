@@ -27,7 +27,8 @@ struct ReadItApp: App {
         WindowGroup {
 #if os(iOS)
             TabView {
-                BookListView()
+                BookListView(storageProvider: config.storageType.makeProvider()) // <--- CAMBIADO (1)
+                    .id(config.storageType) // <--- CAMBIADO (1)
                     .tabItem { Label("Libros", systemImage: "books.vertical") }
 #if Temporizador
                 if config.enableTimer {
@@ -66,7 +67,7 @@ struct ReadItApp: App {
             } detail: {
                 switch selection {
                 case "libros":
-                    BookListView()
+                    BookListView(storageProvider: config.storageType.makeProvider()) // <--- CAMBIADO (2)
 #if Temporizador
                 case "temporizador":
                     if config.enableTimer {

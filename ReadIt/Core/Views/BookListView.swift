@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct BookListView: View {
-    @State private var viewModel = BookListViewModel()
+    @State private var viewModel: BookListViewModel
     @State private var selectedBookID: UUID?
 #if Categorias
     @State private var categoriesViewModel = CategoriesViewModel()
@@ -15,6 +15,10 @@ struct BookListView: View {
 #endif
     /// La configuración la crea la app y llega por el entorno: es la misma que edita Ajustes.
     @Environment(AppConfig.self) private var config
+
+    init(storageProvider: StorageProvider = StorageFactory.makeDefault()) {
+        _viewModel = State(wrappedValue: BookListViewModel(storageProvider: storageProvider))
+    }
 
     var body: some View {
         NavigationStack {
