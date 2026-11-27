@@ -15,6 +15,10 @@ struct ReadItApp: App {
     @State private var timerVM: ReadingTimerViewModel
 #endif
 
+#if Notas
+    @State private var notesVM: NotesViewModel
+#endif
+
     init() {
 #if Progreso
         let progress = ProgressViewModel()
@@ -25,6 +29,11 @@ struct ReadItApp: App {
         let timer = ReadingTimerViewModel()
         PluginRegistry.shared.register(timer)
         _timerVM = State(wrappedValue: timer)
+#endif
+#if Notas
+        let notes = NotesViewModel()
+        PluginRegistry.shared.register(notes)
+        _notesVM = State(wrappedValue: notes)
 #endif
     }
 
@@ -50,6 +59,9 @@ struct ReadItApp: App {
 #endif
 #if Temporizador
             .environment(timerVM)
+#endif
+#if Notas
+            .environment(notesVM)
 #endif
 
 #else
@@ -93,6 +105,9 @@ struct ReadItApp: App {
 #endif
 #if Temporizador
             .environment(timerVM)
+#endif
+#if Notas
+            .environment(notesVM)
 #endif
 
 #endif
