@@ -18,6 +18,10 @@ struct BookDetailView: View {
     @Environment(NotesViewModel.self) private var notesVM
 #endif
 
+#if Prioridades
+    @Environment(PriorityViewModel.self) private var priorityVM
+#endif
+
     var body: some View {
         Form {
             Section(header: Text("Información del libro")) {
@@ -37,6 +41,25 @@ struct BookDetailView: View {
                 }
                 .pickerStyle(.segmented)
             }
+
+#if Prioridades
+            if config.showPriorities {
+                let vm = priorityVM
+                let bookId = book.id
+                Section(header: Text("Prioridad de lectura")) {
+                    Picker("Prioridad", selection: Binding(
+                        get: { vm.getPriority(bookId: bookId) },
+                        set: { vm.setPriority($0, for: bookId) }
+                    )) {
+                        Text("Sin prioridad").tag(Priority?.none)
+                        ForEach(Priority.allCases, id: \.self) { priority in
+                            Text(priority.rawValue).tag(Priority?.some(priority))
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+#endif
 
 #if ListaDeseos
             if config.enableWishlist {

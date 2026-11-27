@@ -12,6 +12,10 @@ struct BookRowView: View {
     @Environment(ProgressViewModel.self) private var progressVM
 #endif
 
+#if Prioridades
+    @Environment(PriorityViewModel.self) private var priorityVM
+#endif
+
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             // Columna izquierda: Título, prioridad, autor, fecha y progreso
@@ -22,7 +26,7 @@ struct BookRowView: View {
 
 #if Prioridades
                     // Píldora de prioridad (Alta / Media / Baja)
-                    if showPriorities, let priority = book.priority {
+                    if showPriorities, let priority = priorityVM.getPriority(bookId: book.id) {
                         Text(priorityText(for: priority))
                             .font(.caption2)
                             .bold()
