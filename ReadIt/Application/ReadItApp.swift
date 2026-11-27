@@ -9,6 +9,9 @@ struct ReadItApp: App {
 #if Progreso
     @State private var progressVM: ProgressViewModel
 #endif
+#if Categorias
+    @State private var categoriesVM: CategoriesViewModel
+#endif
 
 #if Temporizador
     /// ViewModel independiente para O4, solo existe si se compila el producto con Temporizador.
@@ -32,6 +35,11 @@ struct ReadItApp: App {
         let progress = ProgressViewModel()
         PluginRegistry.shared.register(progress)
         _progressVM = State(wrappedValue: progress)
+#endif
+#if Categorias
+        let categories = CategoriesViewModel()
+        PluginRegistry.shared.register(categories)
+        _categoriesVM = State(wrappedValue: categories)
 #endif
 #if Temporizador
         let timer = ReadingTimerViewModel()
@@ -74,6 +82,9 @@ struct ReadItApp: App {
             .environment(config)
 #if Progreso
             .environment(progressVM)
+#endif
+#if Categorias
+            .environment(categoriesVM)
 #endif
 #if Temporizador
             .environment(timerVM)
@@ -126,6 +137,9 @@ struct ReadItApp: App {
             .environment(config)
 #if Progreso
             .environment(progressVM)
+#endif
+#if Categorias
+            .environment(categoriesVM)
 #endif
 #if Temporizador
             .environment(timerVM)

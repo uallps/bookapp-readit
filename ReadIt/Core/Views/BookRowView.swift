@@ -11,6 +11,9 @@ struct BookRowView: View {
 #if Progreso
     @Environment(ProgressViewModel.self) private var progressVM
 #endif
+#if Categorias
+    @Environment(CategoriesViewModel.self) private var categoriesVM
+#endif
 
 #if Prioridades
     @Environment(PriorityViewModel.self) private var priorityVM
@@ -48,8 +51,9 @@ struct BookRowView: View {
                 }
 
 #if Categorias
-                if config.enableCategories, !book.categories.isEmpty {
-                    Text("Categorías: \(book.categories.joined(separator: ", "))")
+                let bookCategories = categoriesVM.categories(for: book.id)
+                if config.enableCategories, !bookCategories.isEmpty {
+                    Text("Categorías: \(bookCategories.joined(separator: ", "))")
                         .bookCaption()
                 }
 #endif

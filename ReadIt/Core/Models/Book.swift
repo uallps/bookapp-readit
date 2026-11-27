@@ -13,9 +13,6 @@ struct Book: Identifiable, Codable {
     var title: String
     var author: String?
     var state: ReadingState = .pending
-#if Categorias
-    var categories: [String] = []
-#endif
 #if AlertasContenido
     var hasSensitiveContent = false
 #endif
@@ -52,9 +49,6 @@ struct Book: Identifiable, Codable {
 #if FechaObjetivo
         case dueDate
 #endif
-#if Categorias
-        case categories, category
-#endif
 #if AlertasContenido
         case hasSensitiveContent
 #endif
@@ -71,13 +65,6 @@ struct Book: Identifiable, Codable {
         author = try container.decodeIfPresent(String.self, forKey: .author)
         state = try container.decodeIfPresent(ReadingState.self, forKey: .state) ?? .pending
 
-#if Categorias
-        var decodedCategories = try container.decodeIfPresent([String].self, forKey: .categories) ?? []
-        if let legacyCategory = try container.decodeIfPresent(String.self, forKey: .category) {
-            decodedCategories.append(legacyCategory)
-        }
-        categories = Self.normalizedCategories(decodedCategories)
-#endif
 #if AlertasContenido
         hasSensitiveContent = try container.decodeIfPresent(Bool.self, forKey: .hasSensitiveContent) ?? false
 #endif
@@ -96,9 +83,6 @@ struct Book: Identifiable, Codable {
         try container.encode(title, forKey: .title)
         try container.encodeIfPresent(author, forKey: .author)
         try container.encode(state, forKey: .state)
-#if Categorias
-        try container.encode(categories, forKey: .categories)
-#endif
 #if AlertasContenido
         try container.encode(hasSensitiveContent, forKey: .hasSensitiveContent)
 #endif

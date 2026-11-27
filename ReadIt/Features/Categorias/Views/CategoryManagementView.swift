@@ -6,6 +6,7 @@ struct CategoryManagementView: View {
     let availableCategories: [String]
 
     @Environment(AppConfig.self) private var config
+    @Environment(CategoriesViewModel.self) private var categoriesVM
     @State private var newCategory = ""
 
     var body: some View {
@@ -13,7 +14,7 @@ struct CategoryManagementView: View {
             Section(header: Text("Crear categoría")) {
                 TextField("Nombre de la categoría", text: $newCategory)
                 Button("Añadir categoría") {
-                    book.addCategory(newCategory)
+                    categoriesVM.addCategory(newCategory, to: book.id)
                     newCategory = ""
                 }
                 .disabled(newCategory.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -27,39 +28,30 @@ struct CategoryManagementView: View {
                     Text("Este libro ya tiene todas las categorías existentes")
                         .foregroundColor(.secondary)
                 } else {
-#if SWIFT_PACKAGE
-                    LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 100))],
-                        data: availableCategoriesToAdd
-                    ) { category in
-                        categoryButton(category)
-                    }
-#else
-                    LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 100))],
-                        alignment: .leading,
-                        spacing: 8
-                    ) {
-                        ForEach(availableCategoriesToAdd, id: \.self) { category in
-                            categoryButton(category)
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 8) {
+                            ForEach(availableCategoriesToAdd, id: \.self) { category in
+                                categoryButton(category)
+                            }
                         }
+                        .padding(.vertical, 2)
                     }
-#endif
                 }
             }
 
             Section(header: Text("Categorías asignadas")) {
-                if book.categories.isEmpty {
+                let bookCategories = categoriesVM.categories(for: book.id)
+                if bookCategories.isEmpty {
                     Text("Sin categorías")
                         .foregroundColor(.secondary)
                 }
 
-                ForEach(book.categories, id: \.self) { category in
+                ForEach(bookCategories, id: \.self) { category in
                     HStack {
                         Text(category)
                         Spacer()
                         Button("Quitar") {
-                            book.removeCategory(category)
+                            categoriesVM.removeCategory(category, from: book.id)
                         }
                     }
                 }
@@ -69,7 +61,7 @@ struct CategoryManagementView: View {
 
     private var availableCategoriesToAdd: [String] {
         availableCategories.filter { category in
-            !book.categories.contains {
+            !categoriesVM.categories(for: book.id).contains {
                 $0.caseInsensitiveCompare(category) == .orderedSame
             }
         }
@@ -77,13 +69,13 @@ struct CategoryManagementView: View {
 
     private func categoryButton(_ category: String) -> some View {
         Button(category) {
-            book.addCategory(category)
+            categoriesVM.addCategory(category, to: book.id)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
+        .fixedSize(horizontal: true, vertical: false)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
         .background(Capsule().fill(Color.secondary.opacity(0.15)))
         .buttonStyle(.plain)
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 #endif
