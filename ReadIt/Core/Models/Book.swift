@@ -29,11 +29,6 @@ struct Book: Identifiable, Codable {
     var priority: Priority?
 #endif
 
-#if Notas
-    // Feature opcional: Notas y citas
-    var notes: [Note] = []
-#endif
-
 #if ListaDeseos
     // Feature opcional: Lista de Deseos / Por comprar
     var isWishlist: Bool = false
@@ -75,9 +70,6 @@ struct Book: Identifiable, Codable {
 #if Prioridades
         case priority
 #endif
-#if Notas
-        case notes
-#endif
 #if ListaDeseos
         case isWishlist
 #endif
@@ -112,10 +104,6 @@ struct Book: Identifiable, Codable {
         priority = try container.decodeIfPresent(Priority.self, forKey: .priority)
 #endif
 
-#if Notas
-        notes = try container.decodeIfPresent([Note].self, forKey: .notes) ?? []
-#endif
-
 #if ListaDeseos
         isWishlist = try container.decodeIfPresent(Bool.self, forKey: .isWishlist) ?? false
 #endif
@@ -142,9 +130,6 @@ struct Book: Identifiable, Codable {
 #endif
 #if Prioridades
         try container.encodeIfPresent(priority, forKey: .priority)
-#endif
-#if Notas
-        try container.encode(notes, forKey: .notes)
 #endif
 #if ListaDeseos
         try container.encode(isWishlist, forKey: .isWishlist)

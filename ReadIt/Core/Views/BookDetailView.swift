@@ -14,6 +14,10 @@ struct BookDetailView: View {
     @State private var totalPages: Int = 0
 #endif
 
+#if Notas
+    @Environment(NotesViewModel.self) private var notesVM
+#endif
+
     var body: some View {
         Form {
             Section(header: Text("Información del libro")) {
@@ -96,7 +100,10 @@ struct BookDetailView: View {
 #if Notas
             if config.enableNotes {
                 Section {
-                    NotesListView(notes: $book.notes)
+                    NotesListView(notes: Binding(
+                        get: { notesVM.getNotes(bookId: book.id) },
+                        set: { notesVM.setNotes($0, for: book.id) }
+                    ))
                 }
             }
 #endif
