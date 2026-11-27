@@ -9,19 +9,11 @@ final class BookListViewModel {
     }
 
     private static var sampleBooks: [Book] {
-#if Prioridades
-        [
-            Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading, priority: .high),
-            Book(title: "Dune", author: "Frank Herbert", state: .pending, priority: .medium),
-            Book(title: "1984", author: "George Orwell", state: .finished)
-        ]
-#else
         [
             Book(title: "El nombre del viento", author: "Patrick Rothfuss", state: .reading),
             Book(title: "Dune", author: "Frank Herbert", state: .pending),
             Book(title: "1984", author: "George Orwell", state: .finished)
         ]
-#endif
     }
 
     @ObservationIgnored private let storageProvider: StorageProvider

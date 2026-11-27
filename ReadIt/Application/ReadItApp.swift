@@ -19,6 +19,10 @@ struct ReadItApp: App {
     @State private var notesVM: NotesViewModel
 #endif
 
+#if Prioridades
+    @State private var priorityVM: PriorityViewModel
+#endif
+
     init() {
 #if Progreso
         let progress = ProgressViewModel()
@@ -34,6 +38,11 @@ struct ReadItApp: App {
         let notes = NotesViewModel()
         PluginRegistry.shared.register(notes)
         _notesVM = State(wrappedValue: notes)
+#endif
+#if Prioridades
+        let priorities = PriorityViewModel()
+        PluginRegistry.shared.register(priorities)
+        _priorityVM = State(wrappedValue: priorities)
 #endif
     }
 
@@ -62,6 +71,9 @@ struct ReadItApp: App {
 #endif
 #if Notas
             .environment(notesVM)
+#endif
+#if Prioridades
+            .environment(priorityVM)
 #endif
 
 #else
@@ -108,6 +120,9 @@ struct ReadItApp: App {
 #endif
 #if Notas
             .environment(notesVM)
+#endif
+#if Prioridades
+            .environment(priorityVM)
 #endif
 
 #endif

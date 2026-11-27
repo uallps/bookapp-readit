@@ -25,10 +25,6 @@ struct Book: Identifiable, Codable {
     var dueDate: Date?
 #endif
 
-#if Prioridades
-    var priority: Priority?
-#endif
-
 #if ListaDeseos
     // Feature opcional: Lista de Deseos / Por comprar
     var isWishlist: Bool = false
@@ -39,7 +35,7 @@ struct Book: Identifiable, Codable {
     var rating: BookRating = BookRating()
 #endif
 
-    // Initializer base explícito (dejamos dueDate en el init para no romper Categorias ni Prioridades)
+    // Initializer base explícito
     init(
         id: UUID = UUID(),
         title: String,
@@ -66,9 +62,6 @@ struct Book: Identifiable, Codable {
 #endif
 #if AlertasContenido
         case hasSensitiveContent
-#endif
-#if Prioridades
-        case priority
 #endif
 #if ListaDeseos
         case isWishlist
@@ -100,10 +93,6 @@ struct Book: Identifiable, Codable {
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
 #endif
 
-#if Prioridades
-        priority = try container.decodeIfPresent(Priority.self, forKey: .priority)
-#endif
-
 #if ListaDeseos
         isWishlist = try container.decodeIfPresent(Bool.self, forKey: .isWishlist) ?? false
 #endif
@@ -128,9 +117,6 @@ struct Book: Identifiable, Codable {
 #if FechaObjetivo
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
 #endif
-#if Prioridades
-        try container.encodeIfPresent(priority, forKey: .priority)
-#endif
 #if ListaDeseos
         try container.encode(isWishlist, forKey: .isWishlist)
 #endif
@@ -140,26 +126,3 @@ struct Book: Identifiable, Codable {
     }
 
 }
-
-// Extensión con conveniencias cuando Prioridades está activo
-#if Prioridades
-extension Book {
-    init(
-        id: UUID = UUID(),
-        title: String,
-        author: String? = nil,
-        state: ReadingState = .pending,
-        dueDate: Date? = nil,
-        priority: Priority? = nil
-    ) {
-        self.init(
-            id: id,
-            title: title,
-            author: author,
-            state: state,
-            dueDate: dueDate
-        )
-        self.priority = priority
-    }
-}
-#endif

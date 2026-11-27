@@ -38,28 +38,4 @@ extension Book {
         return result
     }
 }
-
-#if Prioridades
-extension Book {
-    init(
-        id: UUID = UUID(),
-        title: String,
-        author: String? = nil,
-        state: ReadingState = .pending,
-        categories: [String],
-        dueDate: Date? = nil,
-        priority: Priority? = nil
-    ) {
-        self.init(
-            id: id,
-            title: title,
-            author: author,
-            state: state,
-            categories: categories,
-            dueDate: dueDate
-        )
-        self.priority = priority
-    }
-}
-#endif
 #endif
