@@ -8,10 +8,12 @@ struct ContentAlertDetailsView: View {
 
     var body: some View {
         if config.enableContentAlerts {
+            let vm = alertsVM
+            let id = bookId
             Section(header: Text("Avisos de contenido")) {
                 Toggle("Contenido sensible", isOn: Binding(
-                    get: { alertsVM.hasSensitiveContent(for: bookId) },
-                    set: { alertsVM.setSensitiveContent($0, for: bookId) }
+                    get: { vm.hasSensitiveContent(for: id) },
+                    set: { vm.setSensitiveContent($0, for: id) }
                 ))
             }
         }
