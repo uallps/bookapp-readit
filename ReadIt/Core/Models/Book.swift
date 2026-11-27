@@ -25,11 +25,6 @@ struct Book: Identifiable, Codable {
     var dueDate: Date?
 #endif
 
-#if ListaDeseos
-    // Feature opcional: Lista de Deseos / Por comprar
-    var isWishlist: Bool = false
-#endif
-
 #if Valoraciones
     // Valoración con estrellas y reseña (F4)
     var rating: BookRating = BookRating()
@@ -63,9 +58,6 @@ struct Book: Identifiable, Codable {
 #if AlertasContenido
         case hasSensitiveContent
 #endif
-#if ListaDeseos
-        case isWishlist
-#endif
 #if Valoraciones
         case rating
 #endif
@@ -93,10 +85,6 @@ struct Book: Identifiable, Codable {
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
 #endif
 
-#if ListaDeseos
-        isWishlist = try container.decodeIfPresent(Bool.self, forKey: .isWishlist) ?? false
-#endif
-
 #if Valoraciones
         rating = try container.decodeIfPresent(BookRating.self, forKey: .rating) ?? BookRating()
 #endif
@@ -116,9 +104,6 @@ struct Book: Identifiable, Codable {
 #endif
 #if FechaObjetivo
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
-#endif
-#if ListaDeseos
-        try container.encode(isWishlist, forKey: .isWishlist)
 #endif
 #if Valoraciones
         try container.encode(rating, forKey: .rating)
