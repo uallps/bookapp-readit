@@ -23,6 +23,10 @@ struct ReadItApp: App {
     @State private var priorityVM: PriorityViewModel
 #endif
 
+#if ListaDeseos
+    @State private var wishlistVM: WishlistViewModel
+#endif
+
     init() {
 #if Progreso
         let progress = ProgressViewModel()
@@ -43,6 +47,11 @@ struct ReadItApp: App {
         let priorities = PriorityViewModel()
         PluginRegistry.shared.register(priorities)
         _priorityVM = State(wrappedValue: priorities)
+#endif
+#if ListaDeseos
+        let wishlist = WishlistViewModel()
+        PluginRegistry.shared.register(wishlist)
+        _wishlistVM = State(wrappedValue: wishlist)
 #endif
     }
 
@@ -74,6 +83,9 @@ struct ReadItApp: App {
 #endif
 #if Prioridades
             .environment(priorityVM)
+#endif
+#if ListaDeseos
+            .environment(wishlistVM)
 #endif
 
 #else
@@ -123,6 +135,9 @@ struct ReadItApp: App {
 #endif
 #if Prioridades
             .environment(priorityVM)
+#endif
+#if ListaDeseos
+            .environment(wishlistVM)
 #endif
 
 #endif

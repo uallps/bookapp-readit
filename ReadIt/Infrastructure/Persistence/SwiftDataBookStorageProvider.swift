@@ -20,15 +20,6 @@ final class BookEntity {
 #if FechaObjetivo
     var dueDate: Date?
 #endif
-#if Prioridades
-    var priority: Priority?
-#endif
-#if Notas
-    var notes: [Note]
-#endif
-#if ListaDeseos
-    var isWishlist: Bool
-#endif
 #if Valoraciones
     var rating: BookRating
 #endif
@@ -48,15 +39,6 @@ final class BookEntity {
 #if FechaObjetivo
         self.dueDate = book.dueDate
 #endif
-#if Prioridades
-        self.priority = book.priority
-#endif
-#if Notas
-        self.notes = book.notes
-#endif
-#if ListaDeseos
-        self.isWishlist = book.isWishlist
-#endif
 #if Valoraciones
         self.rating = book.rating
 #endif
@@ -75,15 +57,6 @@ final class BookEntity {
 #endif
 #if FechaObjetivo
         self.dueDate = book.dueDate
-#endif
-#if Prioridades
-        self.priority = book.priority
-#endif
-#if Notas
-        self.notes = book.notes
-#endif
-#if ListaDeseos
-        self.isWishlist = book.isWishlist
 #endif
 #if Valoraciones
         self.rating = book.rating
@@ -105,15 +78,6 @@ final class BookEntity {
 #endif
 #if FechaObjetivo
         result.dueDate = dueDate
-#endif
-#if Prioridades
-        result.priority = priority
-#endif
-#if Notas
-        result.notes = notes
-#endif
-#if ListaDeseos
-        result.isWishlist = isWishlist
 #endif
 #if Valoraciones
         result.rating = rating
