@@ -14,6 +14,18 @@ struct BookDetailView: View {
     @State private var totalPages: Int = 0
 #endif
 
+#if Notas
+    @Environment(NotesViewModel.self) private var notesVM
+#endif
+
+#if Prioridades
+    @Environment(PriorityViewModel.self) private var priorityVM
+#endif
+
+#if ListaDeseos
+    @Environment(WishlistViewModel.self) private var wishlistVM
+#endif
+
     var body: some View {
         Form {
             Section(header: Text("Información del libro")) {
@@ -34,10 +46,34 @@ struct BookDetailView: View {
                 .pickerStyle(.segmented)
             }
 
+#if Prioridades
+            if config.showPriorities {
+                let vm = priorityVM
+                let bookId = book.id
+                Section(header: Text("Prioridad de lectura")) {
+                    Picker("Prioridad", selection: Binding(
+                        get: { vm.getPriority(bookId: bookId) },
+                        set: { vm.setPriority($0, for: bookId) }
+                    )) {
+                        Text("Sin prioridad").tag(Priority?.none)
+                        ForEach(Priority.allCases, id: \.self) { priority in
+                            Text(priority.rawValue).tag(Priority?.some(priority))
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+#endif
+
 #if ListaDeseos
             if config.enableWishlist {
+                let vm = wishlistVM
+                let bookId = book.id
                 Section(header: Text("Lista de Deseos")) {
-                    Toggle("En lista de deseos / Por comprar", isOn: $book.isWishlist)
+                    Toggle("En lista de deseos / Por comprar", isOn: Binding(
+                        get: { vm.isInWishlist(bookId: bookId) },
+                        set: { vm.setWishlist($0, for: bookId) }
+                    ))
                 }
             }
 #endif
@@ -95,8 +131,13 @@ struct BookDetailView: View {
 
 #if Notas
             if config.enableNotes {
+                let vm = notesVM
+                let bookId = book.id
                 Section {
-                    NotesListView(notes: $book.notes)
+                    NotesListView(notes: Binding(
+                        get: { vm.getNotes(bookId: bookId) },
+                        set: { vm.setNotes($0, for: bookId) }
+                    ))
                 }
             }
 #endif

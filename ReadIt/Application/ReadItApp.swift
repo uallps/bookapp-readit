@@ -18,6 +18,18 @@ struct ReadItApp: App {
     @State private var timerVM: ReadingTimerViewModel
 #endif
 
+#if Notas
+    @State private var notesVM: NotesViewModel
+#endif
+
+#if Prioridades
+    @State private var priorityVM: PriorityViewModel
+#endif
+
+#if ListaDeseos
+    @State private var wishlistVM: WishlistViewModel
+#endif
+
     init() {
 #if Progreso
         let progress = ProgressViewModel()
@@ -33,6 +45,21 @@ struct ReadItApp: App {
         let timer = ReadingTimerViewModel()
         PluginRegistry.shared.register(timer)
         _timerVM = State(wrappedValue: timer)
+#endif
+#if Notas
+        let notes = NotesViewModel()
+        PluginRegistry.shared.register(notes)
+        _notesVM = State(wrappedValue: notes)
+#endif
+#if Prioridades
+        let priorities = PriorityViewModel()
+        PluginRegistry.shared.register(priorities)
+        _priorityVM = State(wrappedValue: priorities)
+#endif
+#if ListaDeseos
+        let wishlist = WishlistViewModel()
+        PluginRegistry.shared.register(wishlist)
+        _wishlistVM = State(wrappedValue: wishlist)
 #endif
     }
 
@@ -61,6 +88,15 @@ struct ReadItApp: App {
 #endif
 #if Temporizador
             .environment(timerVM)
+#endif
+#if Notas
+            .environment(notesVM)
+#endif
+#if Prioridades
+            .environment(priorityVM)
+#endif
+#if ListaDeseos
+            .environment(wishlistVM)
 #endif
 
 #else
@@ -107,6 +143,15 @@ struct ReadItApp: App {
 #endif
 #if Temporizador
             .environment(timerVM)
+#endif
+#if Notas
+            .environment(notesVM)
+#endif
+#if Prioridades
+            .environment(priorityVM)
+#endif
+#if ListaDeseos
+            .environment(wishlistVM)
 #endif
 
 #endif

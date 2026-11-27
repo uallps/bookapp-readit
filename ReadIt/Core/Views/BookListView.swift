@@ -15,6 +15,9 @@ struct BookListView: View {
 #endif
     /// La configuración la crea la app y llega por el entorno: es la misma que edita Ajustes.
     @Environment(AppConfig.self) private var config
+#if ListaDeseos
+    @Environment(WishlistViewModel.self) private var wishlistVM
+#endif
 
     init(storageProvider: StorageProvider = StorageFactory.makeDefault()) {
         _viewModel = State(wrappedValue: BookListViewModel(storageProvider: storageProvider))
@@ -127,7 +130,7 @@ struct BookListView: View {
         var books = viewModel.books
 #if ListaDeseos
         if showingWishlist {
-            books = books.filter { $0.isWishlist }
+            books = books.filter { wishlistVM.isInWishlist(bookId: $0.id) }
         }
 #endif
 #if Categorias
