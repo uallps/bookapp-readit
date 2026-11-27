@@ -12,7 +12,7 @@ final class BookEntity {
     var position: Int
 
 #if AlertasContenido
-    var hasSensitiveContent: Bool
+    var hasSensitiveContent = false
 #endif
 #if FechaObjetivo
     var dueDate: Date?
