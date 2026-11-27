@@ -18,6 +18,9 @@ struct BookRowView: View {
 #if Prioridades
     @Environment(PriorityViewModel.self) private var priorityVM
 #endif
+#if AlertasContenido
+    @Environment(ContentAlertsViewModel.self) private var alertsVM
+#endif
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -95,7 +98,7 @@ struct BookRowView: View {
                     .foregroundColor(.white)
 
 #if AlertasContenido
-                ContentAlertBadge(isSensitive: book.hasSensitiveContent)
+                ContentAlertBadge(isSensitive: alertsVM.hasSensitiveContent(for: book.id))
 #endif
             }
         }

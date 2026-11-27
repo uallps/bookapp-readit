@@ -79,7 +79,7 @@ struct BookDetailView: View {
 #endif
 
 #if AlertasContenido
-            ContentAlertDetailsView(book: $book)
+            ContentAlertDetailsView(bookId: book.id)
 #endif
 
 #if Categorias

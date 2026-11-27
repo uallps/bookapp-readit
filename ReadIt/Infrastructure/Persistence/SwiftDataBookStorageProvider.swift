@@ -11,9 +11,6 @@ final class BookEntity {
     var state: ReadingState
     var position: Int
 
-#if AlertasContenido
-    var hasSensitiveContent = false
-#endif
 #if FechaObjetivo
     var dueDate: Date?
 #endif
@@ -27,9 +24,6 @@ final class BookEntity {
         self.author = book.author
         self.state = book.state
         self.position = position
-#if AlertasContenido
-        self.hasSensitiveContent = book.hasSensitiveContent
-#endif
 #if FechaObjetivo
         self.dueDate = book.dueDate
 #endif
@@ -43,9 +37,6 @@ final class BookEntity {
         self.author = book.author
         self.state = book.state
         self.position = position
-#if AlertasContenido
-        self.hasSensitiveContent = book.hasSensitiveContent
-#endif
 #if FechaObjetivo
         self.dueDate = book.dueDate
 #endif
@@ -61,9 +52,6 @@ final class BookEntity {
             author: author,
             state: state
         )
-#if AlertasContenido
-        result.hasSensitiveContent = hasSensitiveContent
-#endif
 #if FechaObjetivo
         result.dueDate = dueDate
 #endif

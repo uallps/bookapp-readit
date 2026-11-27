@@ -23,7 +23,9 @@ enum BookSortOrder: Hashable, CaseIterable, Identifiable {
 }
 
 @Observable
-final class BookSearchSortViewModel {
+final class BookSearchSortViewModel: FeaturePlugin {
+    let name = "Búsqueda y ordenación"
+
     var searchText = ""
     var sortOrder: BookSortOrder = .original
 
