@@ -29,6 +29,12 @@ struct ReadItApp: App {
 #if ListaDeseos
     @State private var wishlistVM: WishlistViewModel
 #endif
+#if AlertasContenido
+    @State private var contentAlertsVM: ContentAlertsViewModel
+#endif
+#if BusquedaOrden
+    @State private var searchSortVM: BookSearchSortViewModel
+#endif
 
     init() {
 #if Progreso
@@ -60,6 +66,16 @@ struct ReadItApp: App {
         let wishlist = WishlistViewModel()
         PluginRegistry.shared.register(wishlist)
         _wishlistVM = State(wrappedValue: wishlist)
+#endif
+#if AlertasContenido
+        let contentAlerts = ContentAlertsViewModel()
+        PluginRegistry.shared.register(contentAlerts)
+        _contentAlertsVM = State(wrappedValue: contentAlerts)
+#endif
+#if BusquedaOrden
+        let searchSort = BookSearchSortViewModel()
+        PluginRegistry.shared.register(searchSort)
+        _searchSortVM = State(wrappedValue: searchSort)
 #endif
     }
 
@@ -97,6 +113,12 @@ struct ReadItApp: App {
 #endif
 #if ListaDeseos
             .environment(wishlistVM)
+#endif
+#if AlertasContenido
+            .environment(contentAlertsVM)
+#endif
+#if BusquedaOrden
+            .environment(searchSortVM)
 #endif
 
 #else
@@ -152,6 +174,12 @@ struct ReadItApp: App {
 #endif
 #if ListaDeseos
             .environment(wishlistVM)
+#endif
+#if AlertasContenido
+            .environment(contentAlertsVM)
+#endif
+#if BusquedaOrden
+            .environment(searchSortVM)
 #endif
 
 #endif

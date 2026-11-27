@@ -13,9 +13,6 @@ struct Book: Identifiable, Codable {
     var title: String
     var author: String?
     var state: ReadingState = .pending
-#if AlertasContenido
-    var hasSensitiveContent = false
-#endif
 
 #if FechaObjetivo
     // Fecha límite para terminar el libro (O2)
@@ -49,9 +46,6 @@ struct Book: Identifiable, Codable {
 #if FechaObjetivo
         case dueDate
 #endif
-#if AlertasContenido
-        case hasSensitiveContent
-#endif
 #if Valoraciones
         case rating
 #endif
@@ -65,9 +59,6 @@ struct Book: Identifiable, Codable {
         author = try container.decodeIfPresent(String.self, forKey: .author)
         state = try container.decodeIfPresent(ReadingState.self, forKey: .state) ?? .pending
 
-#if AlertasContenido
-        hasSensitiveContent = try container.decodeIfPresent(Bool.self, forKey: .hasSensitiveContent) ?? false
-#endif
 #if FechaObjetivo
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
 #endif
@@ -83,9 +74,6 @@ struct Book: Identifiable, Codable {
         try container.encode(title, forKey: .title)
         try container.encodeIfPresent(author, forKey: .author)
         try container.encode(state, forKey: .state)
-#if AlertasContenido
-        try container.encode(hasSensitiveContent, forKey: .hasSensitiveContent)
-#endif
 #if FechaObjetivo
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
 #endif

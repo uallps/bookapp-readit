@@ -11,7 +11,7 @@ struct BookListView: View {
     @State private var showingWishlist = false
 #endif
 #if BusquedaOrden
-    @State private var searchSortViewModel = BookSearchSortViewModel()
+    @Environment(BookSearchSortViewModel.self) private var searchSortViewModel
 #endif
     /// La configuración la crea la app y llega por el entorno: es la misma que edita Ajustes.
     @Environment(AppConfig.self) private var config
